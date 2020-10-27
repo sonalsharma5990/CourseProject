@@ -26,6 +26,7 @@ k potentially casual topics
 
 
 ### Steps
+![Algorithm Steps](./Algorithm.png)
 1. Apply M to D to generate tn topics T1,..,TN
 2. Use C to find topics with significane value sig(C,X,T) > gamma(95%)
    CT: set of candidates casual topics with lags {(tc1, L1),..,(tck,Lk)}.
