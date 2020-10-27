@@ -45,8 +45,10 @@ no more significant topic change). When the process stops, CT is the output casu
 list.
 
 ## Tasks
-1. Find suitable topic modeling method with prior (Use EM?)
-2. Find suitable Casuality Measure
-3. How to identify +, - impact terms (Use pearson coefficients)
-4. Calculate Prior 
-5. Identify suitable lag
+1. Find suitable topic modeling method with prior (Use EM?) :Sonal
+2. Find suitable Casuality Measure : Kamleesh
+3. Find how to calc gamma
+4. How to identify +, - impact terms (Use pearson coefficients)
+5. Find how to calc delta
+6. Calculate Prior : Maneesh
+7. Identify suitable lag
