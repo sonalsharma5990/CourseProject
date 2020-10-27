@@ -20,6 +20,9 @@ Significance measures (e.g. p-value) and impact orientation
 #### tn
 How many topics to model
 
+#### mu μ
+strength of the prior
+
 ### Output
 k potentially casual topics
 (k<=tn): (T1,L1),... (Tk, Lk)
