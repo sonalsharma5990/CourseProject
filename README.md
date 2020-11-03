@@ -38,9 +38,9 @@ k potentially casual topics
    Record the impact values of these significance words (e.g. word-leave Pearson 
    correlations with time series variable)
 4. Define a prior on the topic model parms using significant terms and impact values
-   a) Separate positive impact terms and negative impact terms
+   1. Separate positive impact terms and negative impact terms
       If orientation is very weak ( delta < 10%) ignore minor group
-   b) Assign prior probabilities proporations according to significance levels
+   2. Assign prior probabilities proporations according to significance levels
    
 5. Apply M to D using prior obtained in step 4 
 6. Repeat 2-5 until satisfying stopping criteria (e.g. reach topic quality at some point,
