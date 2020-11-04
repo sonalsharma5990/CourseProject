@@ -23,6 +23,12 @@ How many topics to model
 #### mu μ
 strength of the prior
 
+#### Gamma 𝛾
+Significance Threshold
+
+#### Delta δ
+Impact Threshold
+
 ### Output
 k potentially causal topics
 (k<=tn): (T1,L1),... (Tk, Lk)
