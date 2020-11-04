@@ -24,7 +24,7 @@ How many topics to model
 strength of the prior
 
 ### Output
-k potentially casual topics
+k potentially causal topics
 (k<=tn): (T1,L1),... (Tk, Lk)
 
 
@@ -49,9 +49,9 @@ list.
 
 ## Tasks
 1. Find suitable topic modeling method with prior (Use EM?) :Sonal
-2. Find suitable Casuality Measure : Kamleesh
-3. Find how to calc gamma
-4. How to identify +, - impact terms (Use pearson coefficients)
-5. Find how to calc delta
+2. Find suitable Causality Measure : Kamleesh
+3. Find how to calc gamma: Sonal
+4. How to identify +, - impact terms (Use pearson coefficients): Maneesh/Sonal
+5. Find how to calc delta: Maneesh
 6. Calculate Prior : Maneesh
 7. Identify suitable lag
