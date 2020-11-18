@@ -4,16 +4,21 @@
 Run below for
 - mu = 10,50,100,500,1000
 - Tn = 10,20,30,40, TnVar(The point where causal topics starts to fall relative to previous iteration)
+- Lag Value
 
 ### LDA
 - Input: Document D1,..DT
 - Config: Tn: Number of topics
-- Output: Topics containing words
+- Output: Tn Topics containing words
 
 ### Casualty Score
-- Input: Topics containing words
-- Output: Topics containing words with Causality score(significance score)
-
+- Input: 
+    - Topics containing words
+    - Lag Value
+- Output: 
+    - Topics containing words with Causality score(significance score)
+    - If lag is not 1 day, cross validate the topics for all lags 1 to lag
+    and choose the lag with highest significance
 ### prior_generation
 - Input: Topics with causality significance score
 - Configuration: mu (Strength of prior)
