@@ -1,7 +1,5 @@
 # Iterative Topic Modeling Framework with Time Series Feedback
 
-Please fork this repository and paste the github link of your fork on Microsoft CMT. Detailed instructions are on Coursera under Week 1: Course Project Overview/Week 9 Activities.
-
 ## Algorithm
 ### Parameters
 #### Time series data
@@ -13,7 +11,7 @@ D = {(d1,td1),..,(dm,tdm)}
 #### Topic modeling method M
 Identifies topics
 
-#### Casuality measure C
+#### Causality measure C
 Significance measures (e.g. p-value) and impact orientation
 
 
@@ -38,9 +36,9 @@ k potentially causal topics
 ![Algorithm Steps](./Algorithm.png)
 1. Apply M to D to generate tn topics T1,..,TN
 2. Use C to find topics with significane value sig(C,X,T) > gamma(95%)
-   CT: set of candidates casual topics with lags {(tc1, L1),..,(tck,Lk)}.
+   CT: set of candidates causal topics with lags {(tc1, L1),..,(tck,Lk)}.
 3. For each candidate topic CT, apply C to find most significant
-   casual words among top words w subset of T. 
+   causal words among top words w subset of T.
    Record the impact values of these significance words (e.g. word-leave Pearson 
    correlations with time series variable)
 4. Define a prior on the topic model parms using significant terms and impact values
@@ -50,7 +48,7 @@ k potentially causal topics
    
 5. Apply M to D using prior obtained in step 4 
 6. Repeat 2-5 until satisfying stopping criteria (e.g. reach topic quality at some point,
-no more significant topic change). When the process stops, CT is the output casual topic
+no more significant topic change). When the process stops, CT is the output causal topic
 list.
 
 ## Tasks
