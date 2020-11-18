@@ -10,7 +10,7 @@ Run below for
 - Config: Tn: Number of topics
 - Output: Topics containing words
 
-## Casualty Score
+### Casualty Score
 - Input: Topics containing words
 - Output: Topics containing words with Causality score(significance score)
 
@@ -19,7 +19,7 @@ Run below for
 - Configuration: mu (Strength of prior)
 - Output: Topics containing words with impact and significance
 
-## measure of quality
+### measure of quality
 Calculate purity
 
 
