@@ -43,5 +43,5 @@ class TestOutPlot(unittest.TestCase):
             'TNVar': [40, 91, 87, 85, 89]
         }
         out_plot.plot_for_tn(
-            avg_causality_dummy_by_tn, 
+            avg_causality_dummy_by_tn,
             avg_purity_dummy_by_tn)
