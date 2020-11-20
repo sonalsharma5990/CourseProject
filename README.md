@@ -61,19 +61,19 @@ list.
 7. Identify suitable lag
 
 ## Dataset Tasks
-1. We examine the 2000 U.S. Presidential elec-
+~~1. We examine the 2000 U.S. Presidential elec-
 tion campaign. The input text data comes from New York Times
 Iowa Electronic Markets (IEM) 3 2000 Presidential Winner-Takes-
 All Market
 How to define relation?
 Dates: 11/01/2000 11/10/2000
 
-2. stock prices of American Airlines
+~~2. stock prices of American Airlines
 and Apple and the same New York Times text data set with longer
 time period, but without keyword filtering, to examine the influence
 of having different time series variables for supervision.
 
-Dates: NY Times July 2000 through December 2001 as the text input.
+~~Dates: NY Times July 2000 through December 2001 as the text input.
 Search for Stock prices till July 2000 to December 2001
 Research Part: Kamlesh, Sonal, Maneesh
 
