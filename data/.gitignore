@@ -1,4 +1,1 @@
-# Ignore everything in this directory
-*
-# Except this file
-!.gitignore
+nyt_corpus_LDC2008T19.tgz

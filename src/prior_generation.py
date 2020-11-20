@@ -1,7 +1,7 @@
 """Word level causality and prior generation."""
 
 
-## filter topics with highest causality score
+
 
 
 # for each significant topic, for each word, generate word_count stream
@@ -22,4 +22,16 @@
 ## Cumulative probability mass cutoff
 
 
+
+def word_count_stream(topic, doc_id):
+    pass
+
+
+
+
 ## input would be topics with causality score
+def generate_prior(topics, score, k):
+    ## filter topics with highest causality score
+    sel_topics = [x for _,x in sorted(zip(score,topics))][:k]
+    
+    # count_stream = word_count_stream()

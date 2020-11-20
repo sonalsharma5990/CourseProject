@@ -7,7 +7,10 @@ Run below for
 - Lag Value
 
 ### LDA
-- Input: Document D1,..DT
+- Input: 
+    - Document D1,..DT
+    - Prior 
+    - Collection 
 - Config: Tn: Number of topics
 - Output: Tn Topics containing words
 
@@ -21,8 +24,12 @@ Run below for
     and choose the lag with highest significance
 ### prior_generation
 - Input: Topics with causality significance score
-- Configuration: mu (Strength of prior)
-- Output: Topics containing words with impact and significance
+- Configuration:
+    - mu (Strength of prior)
+    - probM 
+- Output: 
+    - Topic prior
+    - Topics containing words with impact and significance
 
 ### measure of quality
 Calculate purity
