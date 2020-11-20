@@ -1,4 +1,10 @@
 
+## NYT Corpus data
+New York Times corpus was provided by TA's based on request by each team member.
+In order to run the program, the provided nyt_corpus_LDC2008T19.tgz should be in 
+the data folder on local computer. The dataset due to its huge size and access restriction is not included in this repository.
+
+
 ## Stock price data
 We tried getting American Airlines stock data from Yahoo Finance using old Nasdaq code AAMRQ  but it doesn't recognize AAMRQ as valid symbol. We could search by American Airlines new Nasdaq Code AAL but that was available from 2005 onwards.
 
