@@ -6,30 +6,39 @@ Run below for
 - Tn = 10,20,30,40, TnVar(The point where causal topics starts to fall relative to previous iteration)
 - Lag Value
 
+### pre_process
+This module does the filtering and creating corpus.
+pre_process and create non-text time series. Fill in missing dates
+with average/future values.
+
 ### LDA
 - Input: 
     - Document D1,..DT
     - Prior 
-    - Collection 
 - Config: Tn: Number of topics
-- Output: Tn Topics containing words
+- Output: trained lda model
 
 ### Casualty Score
+This module 
+
 - Input: 
-    - Topics containing words
-    - Lag Value
+    - LDA model
+    - Significance cutoff gamma
 - Output: 
-    - Topics containing words with Causality score(significance score)
-    - If lag is not 1 day, cross validate the topics for all lags 1 to lag
-    and choose the lag with highest significance
+    - Topics with lags
+        Tuple containing topic_id, lag
+
 ### prior_generation
-- Input: Topics with causality significance score
+- Input: 
+    - Topics with lags
+    - LDA model
+    - corpus
 - Configuration:
     - mu (Strength of prior)
-    - probM 
+    - probM
+    - Significance cutoff gamma
 - Output: 
-    - Topic prior
-    - Topics containing words with impact and significance
+    - topic word prior
 
 ### measure of quality
 Calculate purity
