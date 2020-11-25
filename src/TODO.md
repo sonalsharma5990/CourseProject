@@ -1,22 +1,19 @@
-Time series no missing gaps in the NY Times corpus
+We know that no missing gaps in the NY Times corpus time series
 
+## pre_process
 1. We will search the corpus for paragraphs where we have Bush or Gore mentioned.
 2. Use only those paragraphs
-
-
-May-2000 => 1May  31st May
-
-
 3. There may be case where for a day, there is no news on Bush and Gore. (Ignore)
 4. Day, 1196039, text (All the parargaphs where bush or Gore) => Stopwords removed, stemming done
 
 
+## LDA
 5. LDA, tn=30
+6. Output tn=30 topics(number of components), returns LDA object itself
 
-6. Output tn=30 topics(number of components), LDA object itself
 
-
-Granger Test:
+## Granger Test
+### Non-text time series
 Pre-processing Non-text time series
 
 “normalized” price of one candidate as a forecast probability of the election outcome: (Gore price)/(Gore price + Bush price).
@@ -25,28 +22,33 @@ Date, Price = 0.55/(.55+.5) => Gore
 
 Date, Price => NonText 
 
+### Granger preparation
 
-
-LDA object from step-6.
+Input: LDA object from step-6.
 Theta_j(document_topic_probability) from lda for each document.
 Document_Id => Assigned by LDA when we run the algorithm. Which document comes first is assigned 0, 1, 2..
 
 
-We start from May-1st:
+for each topic:
+	TS = []
+	for each date in non-text time series:
+		tc = sum(theta_j for each document for this date)
+		TS.append(tc)
+
+~~We start from May-1st:
 	We find all the documents that are in May-1, from list
-		# iterating over topic
-		TC += Theta_j(document_id)
-		Date, TC
-		
-New Time Series:
+		TC += Theta_j(document_id) # for a single topic
+		Date, TC~~
 
-Compare the dates between these two
-=> If we have missing data, used the future data in non-text series
+New Time Series: TS from all TC for a single topic
+Which means you will have a TS (topic series) for each topic
 
-02-May-2000 => 0.92  
+~~Compare the dates between these two~~
+~~=> If we have missing data, used the future data in non-text series~~
 
-Non-text => Keep going 1 day till we find a price => asign the price for missing date.
+~~02-May-2000 => 0.92~~
 
+~~Non-text => Keep going 1 day till we find a price => asign the price for missing date.~~
 9. We have two time series, equal enteries
 
 
