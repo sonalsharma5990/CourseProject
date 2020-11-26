@@ -1,3 +1,4 @@
+from datetime import time
 import logging
 
 import numpy as np
@@ -6,6 +7,7 @@ from gensim.models.ldamulticore import LdaMulticore, LdaModel
 from lda_helper import get_corpus
 from pre_process import normalize_iem_market
 from utils import get_adjacency_matrix
+from causality import calculate_significance
 
 logging.getLogger('gensim.models.ldamodel').setLevel(logging.WARN)
 logging.getLogger('gensim.models.ldamulticore').setLevel(logging.WARN)
@@ -67,12 +69,14 @@ def process(data_folder, num_topics):
 
     matching_dates = get_adjacency_matrix(
         doc_date_map, iem_data['Date'].to_numpy())
-    print(matching_dates.shape)
+    # print(matching_dates.shape)
     time_series = topics.T @ matching_dates
-    print(time_series.shape)
-    np.savetxt('matching_dates.txt', matching_dates)
-    np.savetxt('test_date.txt', doc_date_map)
-    np.savetxt('test.txt', time_series)
+    # print(time_series.shape)
+
+    calculate_significance(
+        time_series,
+        iem_data['LastPrice'].to_numpy(),
+        lag=5)
 
     # print(iem_data)
     # get docu_ids by dates

@@ -42,11 +42,12 @@ def make_stationary(a, window_len, axis=None):
 
 
 if __name__ == '__main__':
-    a = np.arange(1, 21).reshape(2, -1)
+    a = np.arange(1, 21)
     b = np.arange(10, 21)
     print('a', a)
     # get_adjacency_matrix(a, b)
     # print(a.reshape(-1))
-    print(make_stationary(a, 3, axis=1))
-    print(make_stationary(np.arange(1, 11), 3))
-    print(make_stationary(np.arange(11, 21), 3))
+    print(make_stationary(a, 3, axis=0))
+    print(make_stationary(a, 3))
+    # print(make_stationary(np.arange(1, 11), 3))
+    # print(make_stationary(np.arange(11, 21), 3))
