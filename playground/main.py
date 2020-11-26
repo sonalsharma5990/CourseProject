@@ -73,10 +73,12 @@ def process(data_folder, num_topics):
     time_series = topics.T @ matching_dates
     # print(time_series.shape)
 
-    calculate_significance(
+    topic_significance = calculate_significance(
         time_series,
         iem_data['LastPrice'].to_numpy(),
         lag=5)
+
+    print(lda_model.print_topics())
 
     # print(iem_data)
     # get docu_ids by dates
@@ -86,10 +88,11 @@ def process(data_folder, num_topics):
     #     print('document',i)
     #     print(topic_prob)
     #     print('********************')
-    # for topic in lda.top_topics(corpus):
-    #     for word in topic:
-    #         print(word)
-    #     print('------------------------------')
+    for i, topic in enumerate(lda_model.top_topics(corpus)):
+        print('topic',i)
+        for word in topic:
+            print(word)
+        print('------------------------------')
     # count = 0
     # for k, v in corpus.dictionary.items():
     #     print(k,v)
