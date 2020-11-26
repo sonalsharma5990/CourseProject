@@ -156,7 +156,7 @@ def normalize_iem_market(from_date, end_date):
                      usecols=['Date', 'Contract', 'LastPrice'])
     # filter df
     ym_date = df['Date'].apply(
-        lambda x: change_date_format(x,'%m/%d/%y','%Y%m'))
+        lambda x: change_date_format(x, '%m/%d/%y', '%Y%m'))
     df = df.loc[(from_date <= ym_date) & (ym_date <= end_date)]
 
     gore_df = df[df['Contract'] == 'Dem'].reset_index(drop=True)
@@ -179,4 +179,4 @@ if __name__ == '__main__':
     out_dir = 'experiment_2'
     # extract_doc(
     #         '200007','200112',out_dir)
-    normalize_iem_market('200005','200010')
+    normalize_iem_market('200005', '200010')

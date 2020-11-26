@@ -19,6 +19,7 @@ def get_tokens(path):
 
 class NYTimesCorpus:
     """Lazy loaded NYTimes corpus."""
+
     def __init__(self, path, dictionary):
         self.path = path
         self.dictionary = dictionary

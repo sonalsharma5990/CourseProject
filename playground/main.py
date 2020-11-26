@@ -34,8 +34,6 @@ def load_date_doc_mapping(filename):
     return date_doc_map, count
 
 
-
-
 def process(data_folder, num_topics):
     data_file = f'{data_folder}/data.txt.gz'
     date_map_file = f'{data_folder}/doc_date_map.txt'
@@ -52,7 +50,7 @@ def process(data_folder, num_topics):
     # lda_model.save(f'{data_folder}/lda_model')
     lda_model = LdaModel.load(f'{data_folder}/lda_model')
 
-    iem_data = normalize_iem_market('200005','200010')
+    iem_data = normalize_iem_market('200005', '200010')
     # print(iem_data)
     doc_date_map = get_doc_date(date_map_file)
     # print(doc_date_map)

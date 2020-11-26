@@ -18,7 +18,35 @@ def get_adjacency_matrix(a, b):
     return adj_matrix
 
 
+def running_mean(a, window_len, axis=None):
+    """Calculate running mean along axis."""
+    cumsum = np.cumsum(np.insert(a, 0, 0, axis=axis),
+                       axis=axis,
+                       dtype=float)
+    size = np.size(a, axis=axis)
+    return (np.take(
+        cumsum, range(window_len, size + 1),
+        axis=axis) - np.take(
+            cumsum, range(0, size - window_len + 1),
+            axis=axis)) / window_len
+
+
+def make_stationary(a, window_len, axis=None):
+    """
+    Make array `a` stationary by rolling average and subtracting elements.
+    """
+    cum_average = running_mean(a, window_len, axis=axis)
+    if axis is None:
+        return np.diff(cum_average)
+    return np.diff(cum_average, axis=axis)
+
+
 if __name__ == '__main__':
-    a = np.arange(1, 21)
+    a = np.arange(1, 21).reshape(2, -1)
     b = np.arange(10, 21)
-    get_adjacency_matrix(a, b)
+    print('a', a)
+    # get_adjacency_matrix(a, b)
+    # print(a.reshape(-1))
+    print(make_stationary(a, 3, axis=1))
+    print(make_stationary(np.arange(1, 11), 3))
+    print(make_stationary(np.arange(11, 21), 3))
