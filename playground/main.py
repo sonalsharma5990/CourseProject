@@ -8,6 +8,7 @@ from lda_helper import get_corpus
 from pre_process import normalize_iem_market
 from utils import get_adjacency_matrix
 from causality import calculate_significance
+from prior_generation import get_top_words
 
 logging.getLogger('gensim.models.ldamodel').setLevel(logging.WARN)
 logging.getLogger('gensim.models.ldamulticore').setLevel(logging.WARN)
@@ -43,9 +44,9 @@ def process(data_folder, num_topics):
     corpus = get_corpus(data_file)
     eta = None
     # lda_model = LdaMulticore(corpus, num_topics=num_topics,
-    #     id2word=corpus.dictionary,
-    #     passes=10,
-    #     iterations=100,
+    #     # id2word=corpus.dictionary,
+    #     # passes=10,
+    #     # iterations=100,
     #     # minimum_probability=0,
     #     random_state=12345,
     #     eta=eta)
@@ -78,7 +79,7 @@ def process(data_folder, num_topics):
         iem_data['LastPrice'].to_numpy(),
         lag=5)
 
-    print(lda_model.print_topics())
+    topic_words = get_top_words(lda_model)
 
     # print(iem_data)
     # get docu_ids by dates
@@ -88,11 +89,7 @@ def process(data_folder, num_topics):
     #     print('document',i)
     #     print(topic_prob)
     #     print('********************')
-    for i, topic in enumerate(lda_model.top_topics(corpus)):
-        print('topic',i)
-        for word in topic:
-            print(word)
-        print('------------------------------')
+    
     # count = 0
     # for k, v in corpus.dictionary.items():
     #     print(k,v)
