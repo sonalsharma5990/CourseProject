@@ -1,6 +1,8 @@
 matplotlib
 numpy
+pandas
 scipy
 sklearn
 statsmodels
 lxml
+gensim
