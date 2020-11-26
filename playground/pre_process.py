@@ -145,20 +145,29 @@ def combine_files(out_dir, dates):
     logger.info('Number of documents %s', doc_index)
 
 
-def normalize_iem_market():
+def change_date_format(date_, from_format, to_format):
+    return (datetime.strptime(
+        date_, from_format).strftime(to_format))
+
+
+def normalize_iem_market(from_date, end_date):
     """Normalizes iem market data."""
     df = pd.read_csv(WINNER_TAKES_ALL,
-        usecols=['Date','Contract','LastPrice'])
-    gore_df = df[df['Contract']=='Dem'].reset_index(drop=True)
-    bush_df = df[df['Contract']=='Rep'].reset_index(drop=True)
-    gore_df.loc[:, 'LastPrice']= gore_df['LastPrice']/(
-            gore_df['LastPrice']+bush_df['LastPrice'])
-    # change date to yyyymmdd format
-    gore_df.loc[:,'Date'] = gore_df['Date'].apply(
-        lambda x: datetime.strptime(x,'%m/%d/%y').strftime('%Y%m%d'))
-    return gore_df[['Date','LastPrice']].to_numpy()
-    
+                     usecols=['Date', 'Contract', 'LastPrice'])
+    # filter df
+    ym_date = df['Date'].apply(
+        lambda x: change_date_format(x,'%m/%d/%y','%Y%m'))
+    df = df.loc[(from_date <= ym_date) & (ym_date <= end_date)]
 
+    gore_df = df[df['Contract'] == 'Dem'].reset_index(drop=True)
+    bush_df = df[df['Contract'] == 'Rep'].reset_index(drop=True)
+    gore_df.loc[:, 'LastPrice'] = gore_df['LastPrice'] / (
+        gore_df['LastPrice'] + bush_df['LastPrice'])
+    # change date to yyyymmdd format
+    gore_df.loc[:, 'Date'] = gore_df['Date'].apply(
+        lambda x: int(datetime.strptime(x, '%m/%d/%y').strftime('%Y%m%d')))
+
+    return gore_df[['Date', 'LastPrice']]
 
 
 if __name__ == '__main__':
@@ -170,4 +179,4 @@ if __name__ == '__main__':
     out_dir = 'experiment_2'
     # extract_doc(
     #         '200007','200112',out_dir)
-    normalize_iem_market()
+    normalize_iem_market('200005','200010')
