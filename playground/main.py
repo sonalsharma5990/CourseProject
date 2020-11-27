@@ -1,22 +1,19 @@
-from datetime import time
 import logging
 
 import numpy as np
 from gensim.models.ldamulticore import LdaMulticore, LdaModel
-from gensim.matutils import corpus2dense
 
-from lda_helper import get_corpus
+
+from lda_helper import get_corpus, get_document_topic_prob
 from pre_process import normalize_iem_market
 from utils import get_adjacency_matrix
-from causality import calculate_significance
-from prior_generation import (
-    get_top_words,
-    get_top_topics,
-    create_word_stream)
+from causality import calculate_topic_significance
+from prior_generation import process_topic_causality
 
 
 logging.getLogger('gensim.models.ldamodel').setLevel(logging.WARN)
 logging.getLogger('gensim.models.ldamulticore').setLevel(logging.WARN)
+logging.getLogger('gensim.utils').setLevel(logging.WARN)
 
 
 def get_doc_date(filename):
@@ -28,86 +25,60 @@ def get_doc_date(filename):
     return np.array(docs)
 
 
-def load_date_doc_mapping(filename):
-    date_doc_map = {}
-    count = 0
-    with open(filename) as f:
-        for line in f:
-            doc_id, date_ = line.strip().split(',')
-            if date_ in date_doc_map:
-                date_doc_map[date_].append(int(doc_id))
-            else:
-                date_doc_map[date_] = [doc_id]
-            count += 1
-    return date_doc_map, count
-
-
-def process(data_folder, num_topics):
-    data_file = f'{data_folder}/data.txt.gz'
+def get_nontext_series(data_folder):
+    """Initialize timeseries for experiment 1."""
     date_map_file = f'{data_folder}/doc_date_map.txt'
-    # date_doc_map, num_docs = load_date_doc_mapping(date_map_file)
-    corpus = get_corpus(data_file)
+    iem_data = normalize_iem_market('200005', '200010')
+    doc_date_map = get_doc_date(date_map_file)
 
-    eta = None
+    common_dates = get_adjacency_matrix(
+        doc_date_map, iem_data['Date'].to_numpy())
+    nontext_series = iem_data['LastPrice'].to_numpy()
+    return common_dates, nontext_series
+
+
+def initialize_exp1(data_folder):
+    """Initialize corpus and timeseries for experiment 1."""
+    data_file = f'{data_folder}/data.txt.gz'
+    corpus = get_corpus(data_file)
+    return corpus, get_nontext_series(data_folder)
+
+
+def process_exp1(corpus, common_dates, nontext_series, num_topics,
+                 eta=None):
+    """Process experiment-1."""
     # lda_model = LdaMulticore(corpus, num_topics=num_topics,
     #     # id2word=corpus.dictionary,
-    #     # passes=10,
-    #     # iterations=100,
+    #     passes=10,
+    #     iterations=100,
     #     # minimum_probability=0,
     #     random_state=12345,
     #     eta=eta)
-    # lda_model.save(f'{data_folder}/lda_model')
-    lda_model = LdaModel.load(f'{data_folder}/lda_model')
+    lda_model = LdaModel.load(f'experiment_1/lda_model')
+    topics = get_document_topic_prob(
+        lda_model, corpus, num_topics)
+    topics_signf = calculate_topic_significance(
+        topics, common_dates, nontext_series)
+    return process_topic_causality(
+        topics_signf,
+        lda_model,
+        corpus,
+        common_dates,
+        nontext_series)
 
-    iem_data = normalize_iem_market('200005', '200010')
-    # print(iem_data)
-    doc_date_map = get_doc_date(date_map_file)
-    # print(doc_date_map)
-    num_docs = doc_date_map.shape[0]
 
-    term_doc_matrix = corpus2dense(corpus, len(
-        corpus.dictionary), num_docs, dtype=int)
-    print(term_doc_matrix.shape)
-
-    topics = np.zeros((num_docs, num_topics))
-    for doc_id, topic_prob in enumerate(lda_model.get_document_topics(corpus)):
-        for topic_id, theta in topic_prob:
-            topics[doc_id][topic_id] = theta
-            # if topic_id in topics:
-            #     topics[topic_id].append((doc_id, theta))
-            # else:
-            #     topics[topic_id] = [(doc_id,theta)]
-
-    matching_dates = get_adjacency_matrix(
-        doc_date_map, iem_data['Date'].to_numpy())
-    # print(matching_dates.shape)
-    time_series = topics.T @ matching_dates
-    # print(time_series.shape)
-
-    topic_significance = calculate_significance(
-        time_series,
-        iem_data['LastPrice'].to_numpy(),
-        lag=5)
-
-    top_significant_topics = get_top_topics(topic_significance)
-
-    topic_words = get_top_words(lda_model, top_significant_topics)
-    word_stream = create_word_stream(
-        topic_words, term_doc_matrix, matching_dates)
-
-    # print(iem_data)
-    # get docu_ids by dates
-    # sum topic_prob for all docs in dates
-
-    # for i, topic_prob in enumerate(lda.get_document_topics(corpus)):
-    #     print('document',i)
-    #     print(topic_prob)
-    #     print('********************')
-
-    # count = 0
-    # for k, v in corpus.dictionary.items():
-    #     print(k,v)
+def experiment_1():
+    corpus, (common_dates, nontext_series) = initialize_exp1(
+        'experiment_1')
+    eta = None
+    mu = 50
+    for i in range(1):
+        eta = process_exp1(
+            corpus, common_dates, nontext_series,
+            num_topics=30, eta=eta)
+        if eta is not None:
+            eta = mu * eta
 
 
 if __name__ == '__main__':
-    process('experiment_1', num_topics=30)
+    experiment_1()

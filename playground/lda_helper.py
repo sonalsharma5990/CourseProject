@@ -1,6 +1,7 @@
 """This module contains helper functions for LDA modeling."""
 import gzip
 
+import numpy as np
 from gensim.corpora import Dictionary
 from gensim.parsing.preprocessing import (
     remove_stopwords,
@@ -33,3 +34,11 @@ def get_corpus(path):
     """Create dictionary and lazy load corpus."""
     dictionary = Dictionary(get_tokens(path))
     return NYTimesCorpus(path, dictionary)
+
+
+def get_document_topic_prob(lda_model, corpus, num_topics):
+    topics = np.zeros((3492, num_topics))
+    for doc_id, topic_prob in enumerate(lda_model.get_document_topics(corpus)):
+        for topic_id, theta in topic_prob:
+            topics[doc_id][topic_id] = theta
+    return topics
