@@ -1,4 +1,5 @@
 import logging
+from gensim.corpora import dictionary
 
 import numpy as np
 from gensim.matutils import corpus2dense
@@ -154,6 +155,21 @@ def print_topic_word_prob(new_topics, dictionary):
             tabulate(
                 flat_table, [
                     'topic_id', 'word', 'prob'], tablefmt="grid"))
+
+
+def print_top_topics(
+        new_topics, dictionary, max_topics=10, max_words=3):
+    """Print top significant topics and words."""
+    print('*' * 72)
+    flat_table = []
+    headers = f'TOP {max_words} WORDS IN SIGNIFICAN TOPICS'
+    for (index, prob) in new_topics:
+        sorted_i = np.argsort(-prob)
+        top_words_index = index[sorted_i[:3]]
+        top_words = ' '.join([dictionary[i]
+                              for i in top_words_index])
+        flat_table.append(top_words)
+    print(tabulate(flat_table, headers, tablefmt="grid"))
 
 
 def process_topic_causality(
