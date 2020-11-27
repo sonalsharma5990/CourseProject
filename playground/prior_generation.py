@@ -141,7 +141,29 @@ def get_new_topic_word_prob(new_topics, vocab_size, num_topics):
     return eta
 
 
+def print_lda_top_topics(
+        lda_model, top_topics, dictionary, max_topics=10, max_words=3):
+    """Print LDA model top significant topics."""
+    topic_word_prob = lda_model.get_topics()[top_topics, :]
+
+    if topic_word_prob.shape[0] < max_topics:
+        max_topics = topic_word_prob.shape[0]
+    # remember the original index
+    topic_word_index = np.argsort(-topic_word_prob, axis=1)
+
+    print('*' * 72)
+    flat_table = []
+    headers = [f'LDA TOP {max_words} WORDS IN SIGNIFICAN TOPICS']
+    for i in range(max_topics):
+        top_words_index = topic_word_index[i, :3]
+        top_words = ' '.join([dictionary[i]
+                              for i in top_words_index])
+        flat_table.append([top_words])
+    print(tabulate(flat_table, headers, tablefmt="grid"))
+
+
 def print_topic_word_prob(new_topics, dictionary):
+    """Print each word signficance probability for each topic."""
     for topic_id, (index, prob) in enumerate(new_topics):
         print('*' * 72)
         flat_table = []
@@ -177,6 +199,10 @@ def process_topic_causality(
         corpus, common_dates, nontext_series, num_topics):
     """Get significance and probability for topic words."""
     top_significant_topics = get_top_topics(topic_significance)
+
+    print_lda_top_topics(
+        lda_model, top_significant_topics, corpus.dictionary)
+
     topic_lag = get_topic_lag(topic_significance, top_significant_topics)
 
     topic_index, word_index = get_top_words(lda_model, top_significant_topics)
@@ -193,6 +219,7 @@ def process_topic_causality(
                                            topic_lag, topic_index, word_index)
     print_topic_word_prob(new_topics, corpus.dictionary)
     print_top_topics(new_topics, corpus.dictionary)
+
     return get_new_topic_word_prob(
         new_topics, len(
             corpus.dictionary), num_topics)

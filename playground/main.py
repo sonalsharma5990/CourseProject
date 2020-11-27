@@ -4,7 +4,10 @@ import numpy as np
 from gensim.models.ldamulticore import LdaMulticore, LdaModel
 
 
-from lda_helper import get_corpus, get_document_topic_prob
+from lda_helper import (
+    get_corpus,
+    get_document_topic_prob,
+    print_lda_topics)
 from pre_process import normalize_iem_market
 from utils import get_adjacency_matrix
 from causality import calculate_topic_significance
@@ -55,9 +58,12 @@ def process_exp1(corpus, common_dates, nontext_series,
                              passes=10,
                              iterations=100,
                              # minimum_probability=0,
-                             #  random_state=12345,
+                             random_state=98765432,
                              eta=eta)
+    # lda_model.save(f'experiment_1/lda_model')
     # lda_model = LdaModel.load(f'experiment_1/lda_model')
+    print_lda_topics(lda_model, num_topics)
+
     topics = get_document_topic_prob(
         lda_model, corpus, num_docs, num_topics)
     topics_signf = calculate_topic_significance(
