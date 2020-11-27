@@ -23,7 +23,7 @@ def get_topic_lag(topic_significance, top_topics):
         :, 0].astype(int)
 
 
-def get_top_words(lda_model, top_topics, prob_m=0.30):
+def get_top_words(lda_model, top_topics, prob_m=0.40):
     """Get top words with cumulative probability mass cutoff."""
     topic_word_prob = lda_model.get_topics()[top_topics, :]
 

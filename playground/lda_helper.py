@@ -7,6 +7,8 @@ from gensim.corpora import Dictionary
 from gensim.parsing.preprocessing import (
     remove_stopwords,
     strip_punctuation,
+    strip_numeric,
+    strip_short,
     preprocess_string)
 
 
@@ -14,9 +16,11 @@ def get_tokens(path):
     """Create tokens after applying filters."""
     filters = [lambda x: x.lower(),
                strip_punctuation,
-               remove_stopwords]
+               strip_numeric,
+               remove_stopwords,
+               strip_short]
     for line in gzip.open(path, 'rt'):
-        yield preprocess_string(line)
+        yield preprocess_string(line, filters=filters)
 
 
 class NYTimesCorpus:
