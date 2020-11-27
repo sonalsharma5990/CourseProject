@@ -162,13 +162,13 @@ def print_top_topics(
     """Print top significant topics and words."""
     print('*' * 72)
     flat_table = []
-    headers = f'TOP {max_words} WORDS IN SIGNIFICAN TOPICS'
-    for (index, prob) in new_topics:
+    headers = [f'TOP {max_words} WORDS IN SIGNIFICAN TOPICS']
+    for (index, prob) in new_topics[:max_topics]:
         sorted_i = np.argsort(-prob)
         top_words_index = index[sorted_i[:3]]
         top_words = ' '.join([dictionary[i]
                               for i in top_words_index])
-        flat_table.append(top_words)
+        flat_table.append([top_words])
     print(tabulate(flat_table, headers, tablefmt="grid"))
 
 
@@ -192,6 +192,7 @@ def process_topic_causality(
     new_topics = process_word_significance(word_significance,
                                            topic_lag, topic_index, word_index)
     print_topic_word_prob(new_topics, corpus.dictionary)
+    print_top_topics(new_topics, corpus.dictionary)
     return get_new_topic_word_prob(
         new_topics, len(
             corpus.dictionary), num_topics)
