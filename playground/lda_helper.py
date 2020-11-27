@@ -36,8 +36,8 @@ def get_corpus(path):
     return NYTimesCorpus(path, dictionary)
 
 
-def get_document_topic_prob(lda_model, corpus, num_topics):
-    topics = np.zeros((3492, num_topics))
+def get_document_topic_prob(lda_model, corpus, num_docs, num_topics):
+    topics = np.zeros((num_docs, num_topics))
     for doc_id, topic_prob in enumerate(lda_model.get_document_topics(corpus)):
         for topic_id, theta in topic_prob:
             topics[doc_id][topic_id] = theta

@@ -13,9 +13,6 @@ from lxml import etree
 NY_CORPUS = '../data/nyt_corpus_LDC2008T19.tgz'
 WINNER_TAKES_ALL = '../data/IEM 2000 Presidential Winner-Takes-All.csv'
 logger = logging.getLogger(__name__)
-logging.basicConfig(
-    format='%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s',
-    level=logging.INFO)
 
 
 def get_date_range(from_date, to_date):

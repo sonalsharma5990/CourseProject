@@ -31,48 +31,19 @@ def get_top_words(lda_model, top_topics, prob_m=0.25):
     topic_word_prob_sum = np.cumsum(topic_word_prob, axis=1)
 
     prob_cutoff = topic_word_prob_sum <= prob_m
-    x = np.nonzero(prob_cutoff)[0]
-    y = topic_word_index[prob_cutoff]
-    # top_words = np.zeros(topic_word_prob.shape, dtype=int)
-    # top_words[x, y] = 1
-    # # prob contain 570 words representation in compact form
-    # # keey x, y information
-    # print(np.sum(top_words), top_words.shape, np.max(y))
-    return x, y
-
-    # print(topic_word_prob_sum)
-
-    # create adjancy_matrix with top words and top topics
-    # by index of top_topics
-    # index of top words for each topic
-
-    # once we have num_topics * num_words matrix
-    # create doc * num_words matrix
-    # multiply to get num_topic * num_words * document_count matrix
-    # multiply this with doc_id * matching_dates matrix
-    # num_topics * num_words * count_for_matching_dates
-    # pass it to causality score, stationary towards last axis
-    # calculate everything along last axis
-    # num_topics * num_words * significance, impact
-    # calculate significance > 95%
-    # if same topic +, - negative, threshold
-    # split along axis
-    # else make significance = 0
-    # with new tn * word_seq calculate prior
-    # feed new tn and word_seq to sequence
+    topic_index = np.nonzero(prob_cutoff)[0]
+    word_index = topic_word_index[prob_cutoff]
+    return topic_index, word_index
 
 
 def filter_corpus(corpus, word_index):
     term_doc_matrix = corpus2dense(corpus, len(
         corpus.dictionary), dtype=int)
-    # print(np.unique(word_index))
     return term_doc_matrix[np.unique(word_index), :]
 
 
 def create_word_stream(term_doc_matrix, matching_dates):
-    print('term doc matrix shape', term_doc_matrix.shape)
     word_stream = term_doc_matrix @ matching_dates
-    print('word stream', word_stream.shape)
     return word_stream
 
 
@@ -158,6 +129,7 @@ def process_word_significance(word_sig, topic_lag, topic_index, word_index):
 
 
 def get_new_topic_word_prob(new_topics, vocab_size):
+    """Creates new eta matrix."""
     eta = np.zeros((len(new_topics), vocab_size))
     for topic_id, (index, prob) in enumerate(new_topics):
         eta[topic_id, index] = prob
@@ -177,11 +149,9 @@ def print_topic_word_prob(new_topics, dictionary):
 
 
 def process_topic_causality(
-        topic_significance,
-        lda_model,
-        corpus,
-        common_dates,
-        nontext_series):
+        topic_significance, lda_model,
+        corpus, common_dates, nontext_series):
+    """Get significance and probability for topic words."""
     top_significant_topics = get_top_topics(topic_significance)
     topic_lag = get_topic_lag(topic_significance, top_significant_topics)
 
@@ -190,15 +160,11 @@ def process_topic_causality(
     word_stream = create_word_stream(
         term_doc_matrix, common_dates)
 
-    # topic_words_filter(topic_index, word_index, word_stream, topic_lag)
-
     word_significance = calculate_significance(
         word_stream,
         nontext_series,
-        lag=np.unique(topic_lag))
+        lag=list(np.unique(topic_lag)))
 
-    # print(word_significance)
-    # print(word_significance.shape)
     new_topics = process_word_significance(word_significance,
                                            topic_lag, topic_index, word_index)
     print_topic_word_prob(new_topics, corpus.dictionary)

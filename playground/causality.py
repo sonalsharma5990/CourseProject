@@ -42,11 +42,8 @@ def all_lags(gc_result):
 
 
 def get_significance(from_data, to_data, lag):
-    # print('single column from shape', from_data.shape)
-    # print('single column to shape', to_data.shape)
+    """Run granger test and accumulate results."""
     data = np.stack((to_data, from_data), axis=1)
-    # print('output shape', data.shape)
-    # print(data)
     gc_result = grangercausalitytests(data, lag, verbose=False)
     if isinstance(lag, Iterable):
         return all_lags(gc_result)
@@ -54,10 +51,9 @@ def get_significance(from_data, to_data, lag):
 
 
 def calculate_significance(from_timeseries, to_timeseries, lag):
+    """Calculate significance between timeseries."""
     from_timeseries = make_stationary(from_timeseries, window_len=3, axis=1)
     to_timeseries = make_stationary(to_timeseries, window_len=3)
-    # print('from_timeseries shape:', from_timeseries.shape)
-    # print('to_timeseries shape:', to_timeseries.shape)
     return np.apply_along_axis(
         get_significance,
         1,

@@ -10,7 +10,10 @@ from utils import get_adjacency_matrix
 from causality import calculate_topic_significance
 from prior_generation import process_topic_causality
 
-
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    format='%(asctime)s - %(levelname)s - %(name)s:%(lineno)d - %(message)s',
+    level=logging.INFO)
 logging.getLogger('gensim.models.ldamodel').setLevel(logging.WARN)
 logging.getLogger('gensim.models.ldamulticore').setLevel(logging.WARN)
 logging.getLogger('gensim.utils').setLevel(logging.WARN)
@@ -44,19 +47,19 @@ def initialize_exp1(data_folder):
     return corpus, get_nontext_series(data_folder)
 
 
-def process_exp1(corpus, common_dates, nontext_series, num_topics,
-                 eta=None):
+def process_exp1(corpus, common_dates, nontext_series,
+                 num_docs, num_topics, eta=None):
     """Process experiment-1."""
-    # lda_model = LdaMulticore(corpus, num_topics=num_topics,
-    #     # id2word=corpus.dictionary,
-    #     passes=10,
-    #     iterations=100,
-    #     # minimum_probability=0,
-    #     random_state=12345,
-    #     eta=eta)
-    lda_model = LdaModel.load(f'experiment_1/lda_model')
+    lda_model = LdaMulticore(corpus, num_topics=num_topics,
+                             id2word=corpus.dictionary,
+                             passes=10,
+                             iterations=100,
+                             # minimum_probability=0,
+                             random_state=12345,
+                             eta=eta)
+    # lda_model = LdaModel.load(f'experiment_1/lda_model')
     topics = get_document_topic_prob(
-        lda_model, corpus, num_topics)
+        lda_model, corpus, num_docs, num_topics)
     topics_signf = calculate_topic_significance(
         topics, common_dates, nontext_series)
     return process_topic_causality(
@@ -72,11 +75,17 @@ def experiment_1():
         'experiment_1')
     eta = None
     mu = 50
-    for i in range(1):
+    num_topics = 30
+    num_docs = sum(1 for _ in corpus)
+    for i in range(2):
+        logger.info('Processing iteration %s with t_n %s and mu %s',
+                    i + 1, num_topics, mu)
         eta = process_exp1(
             corpus, common_dates, nontext_series,
-            num_topics=30, eta=eta)
+            num_docs, num_topics=num_topics, eta=eta)
         if eta is not None:
+            logger.debug('ETA shape %s', eta.shape)
+            num_topics = eta.shape[0]
             eta = mu * eta
 
 
