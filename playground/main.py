@@ -3,12 +3,17 @@ import logging
 
 import numpy as np
 from gensim.models.ldamulticore import LdaMulticore, LdaModel
+from gensim.matutils import corpus2dense
 
 from lda_helper import get_corpus
 from pre_process import normalize_iem_market
 from utils import get_adjacency_matrix
 from causality import calculate_significance
-from prior_generation import get_top_words
+from prior_generation import (
+    get_top_words,
+    get_top_topics,
+    create_word_stream)
+
 
 logging.getLogger('gensim.models.ldamodel').setLevel(logging.WARN)
 logging.getLogger('gensim.models.ldamulticore').setLevel(logging.WARN)
@@ -42,6 +47,7 @@ def process(data_folder, num_topics):
     date_map_file = f'{data_folder}/doc_date_map.txt'
     # date_doc_map, num_docs = load_date_doc_mapping(date_map_file)
     corpus = get_corpus(data_file)
+
     eta = None
     # lda_model = LdaMulticore(corpus, num_topics=num_topics,
     #     # id2word=corpus.dictionary,
@@ -58,6 +64,10 @@ def process(data_folder, num_topics):
     doc_date_map = get_doc_date(date_map_file)
     # print(doc_date_map)
     num_docs = doc_date_map.shape[0]
+
+    term_doc_matrix = corpus2dense(corpus, len(
+        corpus.dictionary), num_docs, dtype=int)
+    print(term_doc_matrix.shape)
 
     topics = np.zeros((num_docs, num_topics))
     for doc_id, topic_prob in enumerate(lda_model.get_document_topics(corpus)):
@@ -79,7 +89,11 @@ def process(data_folder, num_topics):
         iem_data['LastPrice'].to_numpy(),
         lag=5)
 
-    topic_words = get_top_words(lda_model)
+    top_significant_topics = get_top_topics(topic_significance)
+
+    topic_words = get_top_words(lda_model, top_significant_topics)
+    word_stream = create_word_stream(
+        topic_words, term_doc_matrix, matching_dates)
 
     # print(iem_data)
     # get docu_ids by dates
@@ -89,7 +103,7 @@ def process(data_folder, num_topics):
     #     print('document',i)
     #     print(topic_prob)
     #     print('********************')
-    
+
     # count = 0
     # for k, v in corpus.dictionary.items():
     #     print(k,v)

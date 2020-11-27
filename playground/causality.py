@@ -21,7 +21,7 @@ def get_significance(from_data, to_data, lag):
     data = np.stack((to_data, from_data), axis=1)
     # print('output shape', data.shape)
     # print(data)
-    gc_result = grangercausalitytests(data, lag)
+    gc_result = grangercausalitytests(data, lag, verbose=False)
     min_p_value = float('inf')
     best_lag = 0
     for k, v in gc_result.items():
