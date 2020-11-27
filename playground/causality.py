@@ -14,8 +14,7 @@ def get_impact(gc_result, best_lag):
         return 1
     elif impact < 0:
         return -1
-    print(locals())
-    raise ValueError('No impact found.')
+    return impact
 
 
 def best_lag(gc_result):

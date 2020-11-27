@@ -11,7 +11,9 @@ logger = logging.getLogger(__name__)
 
 def get_top_topics(topic_significance, gamma_cutoff=0.95):
     """Get index of top topics."""
-    return topic_significance[:, 1] > gamma_cutoff
+    filtered_index = np.nonzero(topic_significance[:, 1] > gamma_cutoff)[0]
+    sorted_index = np.argsort(-topic_significance[:, 1])
+    return sorted_index[np.isin(sorted_index, filtered_index)]
 
 
 def get_topic_lag(topic_significance, top_topics):
@@ -20,7 +22,7 @@ def get_topic_lag(topic_significance, top_topics):
         :, 0].astype(int)
 
 
-def get_top_words(lda_model, top_topics, prob_m=0.25):
+def get_top_words(lda_model, top_topics, prob_m=0.30):
     """Get top words with cumulative probability mass cutoff."""
     topic_word_prob = lda_model.get_topics()[top_topics, :]
 
@@ -128,9 +130,11 @@ def process_word_significance(word_sig, topic_lag, topic_index, word_index):
     return new_topics
 
 
-def get_new_topic_word_prob(new_topics, vocab_size):
+def get_new_topic_word_prob(new_topics, vocab_size, num_topics):
     """Creates new eta matrix."""
-    eta = np.zeros((len(new_topics), vocab_size))
+    if len(new_topics) > num_topics:
+        num_topics = len(new_topics)
+    eta = np.zeros((num_topics, vocab_size))
     for topic_id, (index, prob) in enumerate(new_topics):
         eta[topic_id, index] = prob
     return eta
@@ -140,8 +144,12 @@ def print_topic_word_prob(new_topics, dictionary):
     for topic_id, (index, prob) in enumerate(new_topics):
         print('*' * 72)
         flat_table = []
-        for i, word_id in enumerate(index):
-            flat_table.append([topic_id, dictionary[word_id], prob[i]])
+        sorted_i = np.argsort(-prob)
+        sorted_prob = -np.sort(-prob)
+
+        for i, prob_item in enumerate(sorted_prob):
+            flat_table.append(
+                [topic_id, dictionary[index[sorted_i[i]]], prob_item])
         print(
             tabulate(
                 flat_table, [
@@ -150,7 +158,7 @@ def print_topic_word_prob(new_topics, dictionary):
 
 def process_topic_causality(
         topic_significance, lda_model,
-        corpus, common_dates, nontext_series):
+        corpus, common_dates, nontext_series, num_topics):
     """Get significance and probability for topic words."""
     top_significant_topics = get_top_topics(topic_significance)
     topic_lag = get_topic_lag(topic_significance, top_significant_topics)
@@ -168,4 +176,6 @@ def process_topic_causality(
     new_topics = process_word_significance(word_significance,
                                            topic_lag, topic_index, word_index)
     print_topic_word_prob(new_topics, corpus.dictionary)
-    return get_new_topic_word_prob(new_topics, len(corpus.dictionary))
+    return get_new_topic_word_prob(
+        new_topics, len(
+            corpus.dictionary), num_topics)

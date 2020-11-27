@@ -55,7 +55,7 @@ def process_exp1(corpus, common_dates, nontext_series,
                              passes=10,
                              iterations=100,
                              # minimum_probability=0,
-                             random_state=12345,
+                             #  random_state=12345,
                              eta=eta)
     # lda_model = LdaModel.load(f'experiment_1/lda_model')
     topics = get_document_topic_prob(
@@ -67,7 +67,8 @@ def process_exp1(corpus, common_dates, nontext_series,
         lda_model,
         corpus,
         common_dates,
-        nontext_series)
+        nontext_series,
+        num_topics)
 
 
 def experiment_1():
@@ -77,7 +78,7 @@ def experiment_1():
     mu = 50
     num_topics = 30
     num_docs = sum(1 for _ in corpus)
-    for i in range(2):
+    for i in range(5):
         logger.info('Processing iteration %s with t_n %s and mu %s',
                     i + 1, num_topics, mu)
         eta = process_exp1(
