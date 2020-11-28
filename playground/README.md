@@ -43,4 +43,4 @@ This folder is to try different things
     - The timeseries length n is same as IEM data length
     - variable name in code: time_series
 
-- Pass each column of time_series to granger test along with IEM price column
+- Pass each row (Topic wize) of time_series to granger test along with IEM price column
