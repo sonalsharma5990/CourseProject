@@ -5,6 +5,7 @@ import numpy as np
 from statsmodels.tsa.stattools import grangercausalitytests
 
 from utils import make_stationary
+from pearson_correlation import get_pearson_correlation
 
 
 def get_impact(gc_result, best_lag):
@@ -49,12 +50,25 @@ def get_significance(from_data, to_data, lag):
     return best_lag(gc_result)
 
 
-def calculate_significance(from_timeseries, to_timeseries, lag):
-    """Calculate significance between timeseries."""
-    from_timeseries = make_stationary(from_timeseries, window_len=3, axis=1)
-    to_timeseries = make_stationary(to_timeseries, window_len=3)
+def calculate_significance(
+        from_timeseries, to_timeseries, lag, method='granger'):
+    """Calculate significance between timeseries.
+
+    Parameters
+    ----------
+    method : {'granger', 'pearson'}
+    lag : int, default 5
+    """
+    if method == 'granger':
+        # granger test needs stationary series
+        from_timeseries = make_stationary(
+            from_timeseries, window_len=3, axis=1)
+        to_timeseries = make_stationary(to_timeseries, window_len=3)
+        func = get_significance
+    else:
+        func = get_pearson_correlation
     return np.apply_along_axis(
-        get_significance,
+        func,
         1,
         from_timeseries,
         to_timeseries,
@@ -62,9 +76,11 @@ def calculate_significance(from_timeseries, to_timeseries, lag):
 
 
 def calculate_topic_significance(
-        topics, common_dates, nontext_series, lag=5):
+        topics, common_dates, nontext_series, lag=5, method='granger'):
+    """Calculate topic significance based on lag and method."""
     time_series = topics.T @ common_dates
     return calculate_significance(
         time_series,
         nontext_series,
-        lag=lag)
+        lag=lag,
+        method=method)
