@@ -3,8 +3,11 @@ import gzip
 
 from tabulate import tabulate
 import numpy as np
+
+from gensim import utils
 from gensim.corpora import Dictionary
 from gensim.parsing.preprocessing import (
+    STOPWORDS,
     remove_stopwords,
     strip_punctuation,
     strip_numeric,
@@ -12,8 +15,20 @@ from gensim.parsing.preprocessing import (
     preprocess_string)
 
 
-def get_tokens(path):
+EXP1_STOPWORDS = STOPWORDS.union(set(['gore', 'bush', 'said']))
+
+
+def exp1_remove_stopwords(s):
+    s = utils.to_unicode(s)
+    return " ".join(w for w in s.split() if w not in EXP1_STOPWORDS)
+
+
+def get_tokens(path, exp='exp1'):
     """Create tokens after applying filters."""
+    if exp == 'exp1'
+    stopwords_func = exp1_remove_stopwords
+    else:
+        stopwords_func = remove_stopwords
     filters = [lambda x: x.lower(),
                strip_punctuation,
                strip_numeric,
@@ -35,9 +50,9 @@ class NYTimesCorpus:
             yield self.dictionary.doc2bow(tokens)
 
 
-def get_corpus(path):
+def get_corpus(path, exp='exp1'):
     """Create dictionary and lazy load corpus."""
-    dictionary = Dictionary(get_tokens(path))
+    dictionary = Dictionary(get_tokens(path, exp=exp))
     return NYTimesCorpus(path, dictionary)
 
 
