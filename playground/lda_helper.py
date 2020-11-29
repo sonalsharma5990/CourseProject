@@ -15,7 +15,32 @@ from gensim.parsing.preprocessing import (
     preprocess_string)
 
 
-EXP1_STOPWORDS = STOPWORDS.union(set(['gore', 'bush', 'said']))
+# remove words not adding any value to topics found.
+EXP1_STOPWORDS = STOPWORDS.union(set([
+    # remove names of candidates as they are frequently used
+    'george', 'bush', 'dick', 'cheney',
+    'gore', 'lieberman', 'mrs', 'clinton',
+    'ralph', 'nader',
+
+    # remove political jargon words
+    'president', 'vice', 'campaign', 'campaigns',
+    'debate', 'debates', 'convention', 'presidential', 'party',
+    'gov', 'governor', 'state', 'political',
+
+    # remove parties
+    'democrat', 'democrats', 'democratic', 'republican', 'republicans',
+
+    # remove states
+    'new', 'york', 'florida', 'texas',
+
+    # remove common verbs and words
+    'says', 'said', 'told', 'asked', 'calls', 'called', 'think',
+    'people', 'speech', 'plan', 'thing', 'like',
+
+    # remove time words
+    'year', 'years', 'thursday', 'yesterday', 'today',
+    'wednesday', 'sunday', 'monday', 'day', 'thursday', 'tonight']
+))
 
 
 def exp1_remove_stopwords(s):
@@ -25,14 +50,14 @@ def exp1_remove_stopwords(s):
 
 def get_tokens(path, exp='exp1'):
     """Create tokens after applying filters."""
-    if exp == 'exp1'
-    stopwords_func = exp1_remove_stopwords
+    if exp == 'exp1':
+        stopwords_func = exp1_remove_stopwords
     else:
         stopwords_func = remove_stopwords
     filters = [lambda x: x.lower(),
                strip_punctuation,
                strip_numeric,
-               remove_stopwords,
+               stopwords_func,
                strip_short]
     for line in gzip.open(path, 'rt'):
         yield preprocess_string(line, filters=filters)
