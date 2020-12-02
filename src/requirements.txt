@@ -7,3 +7,4 @@ statsmodels
 lxml
 gensim
 tabulate
+plotnine
