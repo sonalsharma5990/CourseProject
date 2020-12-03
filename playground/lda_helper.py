@@ -59,9 +59,12 @@ def get_tokens(path, exp='exp1'):
                strip_numeric,
                stopwords_func,
                strip_short]
+    count = 0
     for line in gzip.open(path, 'rt'):
-        yield preprocess_string(line, filters=filters)
-
+        if count < 100:
+            yield preprocess_string(line, filters=filters)
+            count += 1
+        return
 
 class NYTimesCorpus:
     """Lazy loaded NYTimes corpus."""

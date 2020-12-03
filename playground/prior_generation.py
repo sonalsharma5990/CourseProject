@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 def get_top_topics(topic_significance, gamma_cutoff=0.95):
     """Get index of top topics."""
+    print(topic_significance.shape)
     filtered_index = np.nonzero(topic_significance[:, 1] > gamma_cutoff)[0]
     sorted_index = np.argsort(-topic_significance[:, 1])
     return sorted_index[np.isin(sorted_index, filtered_index)]

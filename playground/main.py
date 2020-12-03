@@ -12,6 +12,7 @@ from pre_process import normalize_iem_market
 from utils import get_adjacency_matrix
 from causality import calculate_topic_significance
 from prior_generation import process_topic_causality
+from plsa import PlsaModel
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -26,8 +27,9 @@ def get_doc_date(filename):
     docs = []
     with open(filename) as f:
         for line in f:
-            _, date_ = line.strip().split(',')
-            docs.append(int(date_))
+            doc_id, date_ = line.strip().split(',')
+            if int(doc_id) < 100:
+                docs.append(int(date_))
     return np.array(docs)
 
 
@@ -51,26 +53,27 @@ def initialize_exp1(data_folder):
 
 
 def process_exp1(corpus, common_dates, nontext_series,
-                 num_docs, num_topics, eta=None):
+                 num_docs, num_topics, 
+                 mu=0,
+                 prior=None):
     """Process experiment-1."""
-    lda_model = LdaMulticore(corpus, num_topics=num_topics,
-                             id2word=corpus.dictionary,
-                             passes=10,
-                             iterations=100,
-                             # minimum_probability=0,
-                             # random_state=98765432,
-                             eta=eta)
-    # lda_model.save(f'experiment_1/lda_model')
-    # lda_model = LdaModel.load(f'experiment_1/lda_model')
-    print_lda_topics(lda_model, num_topics)
+    plsa_model = PlsaModel(corpus,
+        mu=mu,
+        topic_word_prob=prior)
 
-    topics = get_document_topic_prob(
-        lda_model, corpus, num_docs, num_topics)
+    plsa_model.converge(num_topics, max_iter=100)
+    document_topic_prob = plsa_model.document_topic_prob
+    
+    print(document_topic_prob.shape)
+    print(common_dates.shape)
     topics_signf = calculate_topic_significance(
-        topics, common_dates, nontext_series)
+        document_topic_prob, common_dates, nontext_series)
+    
+    print(topics_signf)
+
     return process_topic_causality(
         topics_signf,
-        lda_model,
+        plsa_model,
         corpus,
         common_dates,
         nontext_series,
@@ -84,13 +87,15 @@ def experiment_1():
     mu = 50
     num_topics = 30
     num_docs = sum(1 for _ in corpus)
+    # hard code
+    num_docs = 100
     for i in range(5):
         logger.info('Processing iteration %s with t_n %s and mu %s',
                     i + 1, num_topics, mu)
         print('Iteration', i + 1)
         eta = process_exp1(
             corpus, common_dates, nontext_series,
-            num_docs, num_topics=num_topics, eta=eta)
+            num_docs, num_topics=num_topics)
         if eta is not None:
             logger.debug('ETA shape %s', eta.shape)
             num_topics = eta.shape[0]
