@@ -1,6 +1,7 @@
 import logging
 
 import numpy as np
+from numpy.core.numeric import count_nonzero
 import sparse
 from gensim.matutils import corpus2csc
 
@@ -54,7 +55,9 @@ class PlsaModel:
                 doc_topic_prob,axis=1,keepdims=True)
             print(doc_topic_prob[1])
             print(np.count_nonzero(doc_topic_prob<min_prob))
+            
             doc_topic_prob[doc_topic_prob<min_prob] = 0
+            
             self.doc_topic_prob = sparse.COO(doc_topic_prob)
         
         if not self.topic_word_prob:

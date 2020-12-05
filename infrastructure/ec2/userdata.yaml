@@ -1,0 +1,28 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+packages:
+    - build-essential
+    - libssl-dev
+    - libffi-dev 
+    - python3
+    - python3-pip
+
+write_files:
+- content: |
+    cd /home/ubuntu/
+    pip3 install virtualenvwrapper --user
+    export PATH="$HOME/.local/bin:$PATH"
+    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+    source ~/.local/bin/virtualenvwrapper.sh
+    mkvirtualenv CourseProject
+    git clone https://github.com/sonalsharma5990/CourseProject.git
+    cd CourseProject/src
+    pip install -r requirements.txt
+  path: /home/ubuntu/clone.sh
+  owner: ubuntu:ubuntu
+  
+
+runcmd:
+  - su -u ubuntu bash -c 'whoami;/home/ubuntu/clone.sh'

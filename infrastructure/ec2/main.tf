@@ -44,7 +44,7 @@ resource "aws_spot_instance_request" "cheap_worker" {
   key_name                    = var.ec2_key
   vpc_security_group_ids      = [data.terraform_remote_state.network.outputs.security_group]
   associate_public_ip_address = true
-  user_data                   = file("${path.module}/userdata.sh")
+  user_data                   = file("${path.module}/userdata.yaml")
 
 
   root_block_device {
