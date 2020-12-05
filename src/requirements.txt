@@ -8,3 +8,4 @@ lxml
 gensim
 tabulate
 plotnine
+sparse

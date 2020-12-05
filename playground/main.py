@@ -27,9 +27,9 @@ def get_doc_date(filename):
     docs = []
     with open(filename) as f:
         for line in f:
-            doc_id, date_ = line.strip().split(',')
-            if int(doc_id) < 100:
-                docs.append(int(date_))
+            _, date_ = line.strip().split(',')
+            # if int(doc_id) < 100:
+            #     docs.append(int(date_))
     return np.array(docs)
 
 
@@ -53,22 +53,23 @@ def initialize_exp1(data_folder):
 
 
 def process_exp1(corpus, common_dates, nontext_series,
-                 num_docs, num_topics, 
+                 num_docs, num_topics,
                  mu=0,
                  prior=None):
     """Process experiment-1."""
     plsa_model = PlsaModel(corpus,
-        mu=mu,
-        topic_word_prob=prior)
+                           num_topics,
+                           mu=mu,
+                           topic_word_prob=prior)
 
     plsa_model.converge(num_topics, max_iter=100)
     document_topic_prob = plsa_model.document_topic_prob
-    
+
     print(document_topic_prob.shape)
     print(common_dates.shape)
     topics_signf = calculate_topic_significance(
         document_topic_prob, common_dates, nontext_series)
-    
+
     print(topics_signf)
 
     return process_topic_causality(

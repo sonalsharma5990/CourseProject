@@ -26,7 +26,7 @@ def best_lag(gc_result):
         if p_value < min_p_value:
             best_lag = k
             min_p_value = p_value
-    significance = 1/min_p_value
+    significance = 1 / min_p_value
     impact = get_impact(gc_result, best_lag)
     return np.array([best_lag, significance, impact])
 
@@ -35,7 +35,7 @@ def all_lags(gc_result):
     output = []
     for lag, v in gc_result.items():
         p_value = v[0]['ssr_ftest'][1]
-        significance = 1/p_value
+        significance = 1 / p_value
         impact = get_impact(gc_result, lag)
         output.append([lag, significance, impact])
     return np.array(output)
@@ -73,7 +73,7 @@ def calculate_significance(
         func = get_significance
     else:
         func = get_pearson_correlation
-    
+
     causality = np.apply_along_axis(
         func,
         1,
