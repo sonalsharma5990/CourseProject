@@ -11,6 +11,7 @@ packages:
 
 write_files:
 - content: |
+    set -e
     cd /home/ubuntu/
     pip3 install virtualenvwrapper --user
     export PATH="$HOME/.local/bin:$PATH"
@@ -20,9 +21,12 @@ write_files:
     git clone https://github.com/sonalsharma5990/CourseProject.git
     cd CourseProject/src
     pip install -r requirements.txt
+    cd ../playground
+    python main.py > experiment_1_output.txt
   path: /home/ubuntu/clone.sh
   
 
 runcmd:
-  - [ sh, -c, "chown ubuntu:ubuntu /home/ubuntu/clone.sh" ]
+  - [ bash, -c, "chown -R ubuntu: /home/ubuntu/" ]
+  - [ bash, -c, "chmod +x ubuntu: /home/ubuntu/clone.sh" ]
   - sudo -u ubuntu bash -c 'whoami;/home/ubuntu/clone.sh'
