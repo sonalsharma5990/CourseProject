@@ -21,8 +21,8 @@ write_files:
     cd CourseProject/src
     pip install -r requirements.txt
   path: /home/ubuntu/clone.sh
-  owner: ubuntu:ubuntu
   
 
 runcmd:
+  - [ sh, -c, "chown ubuntu:ubuntu /home/ubuntu/clone.sh" ]
   - sudo -u ubuntu bash -c 'whoami;/home/ubuntu/clone.sh'
