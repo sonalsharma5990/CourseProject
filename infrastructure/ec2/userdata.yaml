@@ -25,4 +25,4 @@ write_files:
   
 
 runcmd:
-  - su -u ubuntu bash -c 'whoami;/home/ubuntu/clone.sh'
+  - sudo -u ubuntu bash -c 'whoami;/home/ubuntu/clone.sh'
