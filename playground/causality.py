@@ -25,8 +25,8 @@ def best_lag(gc_result):
         p_value = v[0]['ssr_ftest'][1]
         if p_value < min_p_value:
             best_lag = k
-            min_p_value = p_value
-    significance = 1 / min_p_value
+            min_p_value = 1 - p_value
+    significance = min_p_value
     impact = get_impact(gc_result, best_lag)
     return np.array([best_lag, significance, impact])
 
@@ -35,7 +35,7 @@ def all_lags(gc_result):
     output = []
     for lag, v in gc_result.items():
         p_value = v[0]['ssr_ftest'][1]
-        significance = 1 / p_value
+        significance = 1-p_value
         impact = get_impact(gc_result, lag)
         output.append([lag, significance, impact])
     return np.array(output)
@@ -53,7 +53,10 @@ def get_significance(from_data, to_data, lag):
 def normalize_causality(causality):
     """Normalize significance for all enteries."""
     # for each lag
+    print(causality.shape)
     print(causality)
+    causality[:,1] /= np.sum(causality[:,1])
+    print(np.round(causality[:,1],3))
 
 
 def calculate_significance(
@@ -74,13 +77,13 @@ def calculate_significance(
     else:
         func = get_pearson_correlation
 
-    causality = np.apply_along_axis(
+    return np.apply_along_axis(
         func,
         1,
         from_timeseries,
         to_timeseries,
         lag)
-    return normalize_causality(causality)
+    # return normalize_causality(causality)
 
 
 def calculate_topic_significance(
