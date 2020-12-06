@@ -11,7 +11,7 @@ packages:
 
 write_files:
 - content: |
-    set -e
+    #!/usr/bin/env bash
     cd /home/ubuntu/
     pip3 install virtualenvwrapper --user
     export PATH="$HOME/.local/bin:$PATH"
@@ -23,10 +23,11 @@ write_files:
     pip install -r requirements.txt
     cd ../playground
     python main.py > experiment_1_output.txt
-  path: /home/ubuntu/clone.sh
+  path: /root/clone.sh
   
 
 runcmd:
-  - [ bash, -c, "chown -R ubuntu: /home/ubuntu/" ]
-  - [ bash, -c, "chmod +x ubuntu: /home/ubuntu/clone.sh" ]
-  - sudo -u ubuntu bash -c 'whoami;/home/ubuntu/clone.sh'
+  - sudo cp /root/clone.sh /home/ubuntu/clone.sh
+  - [ bash, -c, "chmod +x /home/ubuntu/clone.sh" ]
+  - [ bash, -c, "chown ubuntu: /home/ubuntu/clone.sh" ]
+  - sudo -u ubuntu bash -c 'whoami;/root/clone.sh'
