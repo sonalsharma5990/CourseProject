@@ -73,7 +73,6 @@ https://github.com/sonalsharma5990/CourseProject/tree/main/data/README.md
    12)Repeat until satisfying stopping criteria (e.g. reach topic quality at some point, no more significant topic change).
 
 
-
 ### Hurdles and Ladders:
 1) Algorithm to implement Topic Modelling:
    We had a tough call between PLSA and LDA here. 
