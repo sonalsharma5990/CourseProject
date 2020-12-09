@@ -35,7 +35,7 @@ def all_lags(gc_result):
     output = []
     for lag, v in gc_result.items():
         p_value = v[0]['ssr_ftest'][1]
-        significance = 1-p_value
+        significance = 1 - p_value
         impact = get_impact(gc_result, lag)
         output.append([lag, significance, impact])
     return np.array(output)
@@ -54,9 +54,21 @@ def normalize_causality(causality):
     """Normalize significance for all enteries."""
     # for each lag
     print(causality.shape)
-    print(causality)
-    causality[:,1] /= np.sum(causality[:,1])
-    print(np.round(causality[:,1],3))
+    if len(causality.shape) == 3:
+        print(causality[:10])
+        print(-np.sort(-causality[:, :, 1], axis=0)[:10])
+        most_significant = -np.sort(-causality[:, :, 1], axis=0)[0]
+        print('3d most sign', most_significant)
+        causality[:, :, 1] /= most_significant
+
+    else:
+        print(-np.sort(-causality[:, 1])[:10])
+        most_significant = -np.sort(-causality[:, 1])[0]
+        causality[:, 1] /= most_significant
+
+    print(np.round(causality[0], 5))
+
+    return causality
 
 
 def calculate_significance(

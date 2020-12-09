@@ -41,7 +41,6 @@ class PlsaModel:
         self.prior_topic_word_prob = prior_topic_word_prob
         self.topic_prob = None  # P(z | d, w)
 
-
     def initialize_randomly(self, min_prob):
         """
         Randomly initialize the matrices: document_topic_prob and topic_word_prob
@@ -52,24 +51,22 @@ class PlsaModel:
             doc_topic_prob = np.random.rand(
                 self.num_docs, self.num_terms)
             doc_topic_prob /= np.sum(
-                doc_topic_prob,axis=1,keepdims=True)
+                doc_topic_prob, axis=1, keepdims=True)
             print(doc_topic_prob[1])
-            print(np.count_nonzero(doc_topic_prob<min_prob))
-            
-            doc_topic_prob[doc_topic_prob<min_prob] = 0
-            
+            print(np.count_nonzero(doc_topic_prob < min_prob))
+
+            doc_topic_prob[doc_topic_prob < min_prob] = 0
+
             self.doc_topic_prob = sparse.COO(doc_topic_prob)
-        
+
         if not self.topic_word_prob:
             topic_word_prob = np.random.rand(
                 self.num_topics, self.num_terms)
             topic_word_prob /= np.sum(
-                topic_word_prob,axis=1, keepdims=True)
-            topic_word_prob[topic_word_prob<min_prob] = 0
+                topic_word_prob, axis=1, keepdims=True)
+            topic_word_prob[topic_word_prob < min_prob] = 0
             self.topic_word_prob = sparse.COO(topic_word_prob)
-            
 
-   
     # handle differently for first iteration
 
     def expectation_step(self):
@@ -84,24 +81,23 @@ class PlsaModel:
             self.topic_word_prob)
         self.topic_prob /= np.sum(self.topic_prob, axis=1, keepdims=True)
 
-
     def em_step(self):
         """EM step."""
         print('shape of doc topic prob', self.doc_topic_prob.shape)
         print('shape of topic_word_prob', self.topic_word_prob.shape)
         topic_prob = self.doc_topic_prob.reshape(
-            (*self.doc_topic_prob.shape,1)) * self.topic_word_prob.T
+            (*self.doc_topic_prob.shape, 1)) * self.topic_word_prob.T
         topic_prob /= topic_prob.sum(axis=1, keepdims=True)
-        
+
         # print(self.term_doc_matrix.todense())
         self.doc_topic_prob = sparse.diagonal(
             topic_prob.dot(self.term_doc_matrix),
             axis2=2).T
         self.doc_topic_prob /= np.sum(
             self.doc_topic_prob, axis=1, keepdims=True)
-        
+
         topic_word_prob_n = sparse.diagonal(
-            np.dot(topic_prob.T, self.term_doc_matrix),axis2=2)
+            np.dot(topic_prob.T, self.term_doc_matrix), axis2=2)
 
         topic_word_prob_d = np.sum(
             topic_word_prob_n, axis=1, keepdims=True)
@@ -112,7 +108,6 @@ class PlsaModel:
             topic_word_prob_d += self.mu
 
         self.topic_word_prob = topic_word_prob_n / topic_word_prob_d
-
 
     # handle differently for first iteration
     # handle differently if one-dim matrix
@@ -153,9 +148,8 @@ class PlsaModel:
         return np.sum(self.term_doc_matrix * np.log(
             np.dot(self.document_topic_prob, self.topic_word_prob)))
 
-
     def iterate(self, min_prob, max_iter, epsilon):
-         # Run the EM algorithm
+        # Run the EM algorithm
         min_prob = max(min_prob, 1e-8)
         self.initialize_randomly(min_prob)
         current_likelihood = 0.0
@@ -170,8 +164,6 @@ class PlsaModel:
                 return new_likelihood
             current_likelihood = new_likelihood
         return current_likelihood
-        
-
 
     def converge(self,
                  min_prob=0.01,
@@ -189,8 +181,7 @@ class PlsaModel:
 
         for i in range(passes):
             likelihood = self.iterate(min_prob, max_iter, epsilon)
-            self.likelihoods.append([likelihood, self.doc_topic_prob, self.topic_word_prob])
+            self.likelihoods.append(
+                [likelihood, self.doc_topic_prob, self.topic_word_prob])
             self.doc_topic_prob = None
-            self.topic_word_prob = None        
-
-       
+            self.topic_word_prob = None

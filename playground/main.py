@@ -53,16 +53,16 @@ def initialize_exp1(data_folder):
 def process_exp1(corpus, common_dates, nontext_series,
                  num_docs, num_topics, eta=None, mu=0):
     """Process experiment-1."""
-    lda_model = LdaMulticore(corpus, num_topics=num_topics,
-                             id2word=corpus.dictionary,
-                             passes=10,
-                             iterations=100,
-                             decay=mu,
-                             # minimum_probability=0,
-                             # random_state=98765432,
-                             eta=eta)
+    # lda_model = LdaMulticore(corpus, num_topics=num_topics,
+    #                          id2word=corpus.dictionary,
+    #                          passes=10,
+    #                          iterations=100,
+    #                          decay=mu,
+    #                          # minimum_probability=0,
+    #                          # random_state=98765432,
+    #                          eta=eta)
     # lda_model.save(f'experiment_1/lda_model')
-    # lda_model = LdaModel.load(f'experiment_1/lda_model')
+    lda_model = LdaModel.load(f'experiment_1/lda_model')
     logger.info('LDA model built.')
     print_lda_topics(lda_model, num_topics)
 
@@ -83,7 +83,7 @@ def experiment_1():
     corpus, (common_dates, nontext_series) = initialize_exp1(
         'experiment_1')
     eta = None
-    mu=0
+    mu = 0
     num_topics = 30
     num_docs = sum(1 for _ in corpus)
     for i in range(1):

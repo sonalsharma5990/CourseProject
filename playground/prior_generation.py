@@ -14,6 +14,7 @@ def get_top_topics(topic_significance, gamma_cutoff=0.95):
     """Get index of top topics."""
     print(topic_significance.shape)
     filtered_index = np.nonzero(topic_significance[:, 1] > gamma_cutoff)[0]
+    # sorting as we want most causal topic on top
     sorted_index = np.argsort(-topic_significance[:, 1])
     return sorted_index[np.isin(sorted_index, filtered_index)]
 
@@ -218,7 +219,7 @@ def process_topic_causality(
 
     new_topics = process_word_significance(word_significance,
                                            topic_lag, topic_index, word_index)
-    print_topic_word_prob(new_topics, corpus.dictionary)
+    # print_topic_word_prob(new_topics, corpus.dictionary)
     print_top_topics(new_topics, corpus.dictionary)
 
     return get_new_topic_word_prob(
