@@ -6,8 +6,9 @@ import logging
 import shutil
 import gzip
 from concurrent.futures import ProcessPoolExecutor, as_completed
-import pandas as pd
 
+import pandas as pd
+import numpy as np
 from lxml import etree
 
 NY_CORPUS = '../data/nyt_corpus_LDC2008T19.tgz'
@@ -165,6 +166,32 @@ def normalize_iem_market(from_date, end_date):
         lambda x: int(datetime.strptime(x, '%m/%d/%y').strftime('%Y%m%d')))
 
     return gore_df[['Date', 'LastPrice']]
+
+
+def fill_missing_dates_by_future(time_df, missing_dates):
+    """Fill missing dates by future value."""
+    # get index of missing date
+    new_rows = []
+    for date_ in missing_dates:
+
+        # find the first date larger than current date
+        value = time_df[time_df['Date'] > date_]['LastPrice'].iloc[0]
+        # print(date_, value)
+        new_rows.append([date_, value])
+    new_df = pd.DataFrame(new_rows, columns=time_df.columns)
+    time_df = time_df.append(new_df, ignore_index=True)
+    return time_df.sort_values(by='Date')
+
+
+def match_dates(iem_df, doc_dates):
+    """Fill missing dates values and delete extra dates."""
+    # extract dates that match with doc_dates
+    iem_df = iem_df[iem_df['Date'].isin(doc_dates)]
+
+    missing_dates = np.setdiff1d(
+        doc_dates, iem_df['Date'].to_numpy(), assume_unique=True)
+
+    return fill_missing_dates_by_future(iem_df, missing_dates)
 
 
 if __name__ == '__main__':

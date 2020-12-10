@@ -107,3 +107,17 @@ def calculate_topic_significance(
         nontext_series,
         lag=lag,
         method=method)
+
+
+def calculate_topic_significance_seq(doc_topic_prob, doc_date):
+    # get dates from experiment1 data
+    # get dates form IEM data
+    # compare if any date missing
+    # if not map with doc id in the document
+    # and multiply
+    # for every topic, for each day, sum all documents theta_j
+    # for every date
+    # find all doc_index
+    # sum the topic_distribution
+
+    pass

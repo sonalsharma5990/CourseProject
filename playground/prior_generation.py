@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def get_top_topics(topic_significance, gamma_cutoff=0.95):
     """Get index of top topics."""
-    print(topic_significance.shape)
+    # print(topic_significance.shape)
     filtered_index = np.nonzero(topic_significance[:, 1] > gamma_cutoff)[0]
     # sorting as we want most causal topic on top
     sorted_index = np.argsort(-topic_significance[:, 1])
@@ -48,7 +48,9 @@ def filter_corpus(corpus, word_index):
 
 
 def create_word_stream(term_doc_matrix, matching_dates):
+    # print(matching_dates)
     word_stream = term_doc_matrix @ matching_dates
+    # print(word_stream[:10,:2])
     return word_stream
 
 
@@ -59,15 +61,20 @@ def is_pure_impact(positive_impact, negative_impact, delta=0.1):
             or negative_count < delta * positive_count)
 
 
-def filter_signf_words(word_sig, word_index, filter):
-    return word_sig[filter, :], word_index[filter]
+def filter_signf_words(word_sig, word_index, filter_):
+    return word_sig[filter_, :], word_index[filter_]
 
 
 def get_sigificant_words(word_sig, word_index, gamma_cutoff=0.95):
     """Select top words based on gamma cutoff."""
+    # print('word signficance shape', word_sig[:3,:])
     cutoff = word_sig[:, 1] > gamma_cutoff
+    filtered_index = np.nonzero(word_sig[:, 1] > gamma_cutoff)[0]
+    # sorting as we want most causal topic on top
+    sorted_index = np.argsort(-word_sig[:, 1])
+    filter_ = sorted_index[np.isin(sorted_index, filtered_index)]
     return filter_signf_words(
-        word_sig, word_index, cutoff)
+        word_sig, word_index, filter_)
 
 
 def process_impact(word_sig, word_index, delta=0.1):
@@ -104,15 +111,28 @@ def calculate_topic_prior(top_words, gamma_cutoff=0.95):
     return (top_words - gamma_cutoff) / np.sum(top_words - gamma_cutoff)
 
 
-def process_word_significance(word_sig, topic_lag, topic_index, word_index):
+def process_word_significance2(word_sig, topic_index, word_index):
+    pass
+
+
+def process_word_significance(
+        word_sig,
+        topic_lag,
+        topic_index,
+        word_index,
+        corpus):
     unique_words = np.unique(word_index)
     unique_lags = np.unique(topic_lag)
 
     new_topics = []
+    # print('word index',word_index.shape)
+    # print('topic index', topic_index.shape)
     for i, lag in enumerate(topic_lag):
         topic_words = word_index[topic_index == i]
+
         series_index = np.nonzero(np.isin(unique_words, topic_words))[0]
-        topic_word_sig = word_sig[series_index, lag == unique_lags, :]
+        # print(word_sig.shape)
+        topic_word_sig = word_sig[series_index, :]
 
         # filter words with significance > .95%
         topic_word_sig, topic_words = get_sigificant_words(
@@ -121,8 +141,27 @@ def process_word_significance(word_sig, topic_lag, topic_index, word_index):
         if(topic_word_sig.size == 0):
             continue
 
+        # print('*'*72,'significant topics')
+        # for i in topic_words:
+        #     word = corpus.dictionary[i]
+        #     # if word in ('oil', 'tax'):
+        #     #     print('******')
+        #     print(word)
+        # # exit(1)
+        # print('end', '*'*72,'significant topics')
+
         original_topic, split_topic = process_impact(
             topic_word_sig, topic_words)
+        # print('original topic', original_topic[1])
+        # print('*'*72, 'words after split')
+        # for i in original_topic[1]:
+        #     word = corpus.dictionary[i]
+        #     # if word in ('oil', 'tax'):
+        #     #     print('******')
+        #     print(word)
+        # print('end','*'*72, 'words after split')
+
+        # print('topic, prior', calculate_topic_prior(original_topic[0][:, 1]))
         new_topics.append(
             (original_topic[1], calculate_topic_prior(original_topic[0][:, 1])))
 
@@ -138,7 +177,9 @@ def get_new_topic_word_prob(new_topics, vocab_size, num_topics):
     if len(new_topics) > num_topics:
         num_topics = len(new_topics)
     eta = np.zeros((num_topics, vocab_size))
+    # print('Print final output')
     for topic_id, (index, prob) in enumerate(new_topics):
+        # print(topic_id, index, prob)
         eta[topic_id, index] = prob
     return eta
 
@@ -202,12 +243,24 @@ def process_topic_causality(
     """Get significance and probability for topic words."""
     top_significant_topics = get_top_topics(topic_significance)
 
-    print_lda_top_topics(
-        lda_model, top_significant_topics, corpus.dictionary)
+    # print_lda_top_topics(
+    #     lda_model, top_significant_topics, corpus.dictionary)
 
     topic_lag = get_topic_lag(topic_significance, top_significant_topics)
+    print('topic lag', topic_lag)
 
     topic_index, word_index = get_top_words(lda_model, top_significant_topics)
+    # print(topic_index)
+    # print(word_index)
+    # print('words from significant topics')
+    # for i in word_index:
+    #     word = corpus.dictionary[i]
+    #     if word in ('oil', 'tax'):
+    #         print('******')
+    #     print(word)
+    # # exit(1)
+    # print('end words from significant topics')
+    # till this point verified
     term_doc_matrix = filter_corpus(corpus, word_index)
     word_stream = create_word_stream(
         term_doc_matrix, common_dates)
@@ -215,10 +268,10 @@ def process_topic_causality(
     word_significance = calculate_significance(
         word_stream,
         nontext_series,
-        lag=list(np.unique(topic_lag)))
+        lag=5)
 
-    new_topics = process_word_significance(word_significance,
-                                           topic_lag, topic_index, word_index)
+    new_topics = process_word_significance(
+        word_significance, topic_lag, topic_index, word_index, corpus)
     # print_topic_word_prob(new_topics, corpus.dictionary)
     print_top_topics(new_topics, corpus.dictionary)
 
