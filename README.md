@@ -97,3 +97,8 @@ https://github.com/sonalsharma5990/CourseProject/tree/main/data/README.md
 
 #### Final Results:
 
+## Quantitative Evaluation Results
+
+![With different mu](./data/experiment_1/mu_graph.png)
+
+![With different tn](./data/experiment_1/tn_graph.png)

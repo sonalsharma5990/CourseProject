@@ -1,5 +1,6 @@
 import logging
 import sys
+import random
 
 import numpy as np
 from gensim.models.ldamulticore import LdaMulticore, LdaModel
@@ -65,7 +66,8 @@ def load_corpus(data_folder):
 
 def train_lda_model(
         corpus, num_topics, iter_i,
-        eta=None, mu=0, load_saved=False):
+        eta=None, mu=0, load_saved=False,
+        random_state=None):
     if load_saved:
         lda_model = LdaModel.load(f'../data/experiment_1/lda_model_{iter_i}')
     else:
@@ -75,7 +77,7 @@ def train_lda_model(
                                  iterations=100,
                                  decay=mu,
                                  # minimum_probability=0,
-                                 # random_state=98765432,
+                                 random_state=random_state,
                                  eta=eta)
         # lda_model.save(f'experiment_1/lda_model_{iter_i}')
     logger.info('LDA model built.')
@@ -104,7 +106,9 @@ def process_exp1(lda_model, corpus, doc_date_matrix, nontext_series,
         num_topics)
 
 
-def experiment_1(exp_mu=50, num_topics=30, load_saved=False):
+def experiment_1(exp_mu=50, num_topics=30,
+                 num_iter=5, load_saved=False,
+                 random_state=None):
     data_folder = '../data/experiment_1'
     corpus = load_corpus(data_folder)
     doc_date_matrix, nontext_series = get_nontext_series(data_folder)
@@ -115,13 +119,14 @@ def experiment_1(exp_mu=50, num_topics=30, load_saved=False):
     eta = None
     mu = 0
     lda_model = None
-    for i in range(5):
+    for i in range(num_iter):
         logger.info('Processing iteration %s with t_n %s and mu %s',
                     i + 1, num_topics, mu)
         print('Iteration', i + 1)
         lda_model = train_lda_model(
             corpus, num_topics, i,
-            eta=eta, mu=mu, load_saved=load_saved)
+            eta=eta, mu=mu, load_saved=load_saved,
+            random_state=random_state)
         eta, avg_sigf, avg_purity = process_exp1(
             lda_model, corpus, doc_date_matrix, nontext_series,
             num_docs, num_topics)
@@ -134,27 +139,34 @@ def experiment_1(exp_mu=50, num_topics=30, load_saved=False):
     return topic_stats
 
 
-def experiment_1_eval():
+def experiment_1_eval(num_iter=5, random_state=None):
+    # set a random state for lda model, so that all iterations are consistent
+    if random_state is None:
+        random_state = random.randint(10000, 99999)
+    logger.info('Random seed for evaulation: %s', random_state)
+    data_folder = '../data/experiment_1'
     all_mu = [10, 50, 100, 500, 1000]
     mu_topic_stats = []
     for mu in all_mu:
-        mu_topic_stats.extend(experiment_1(exp_mu=mu))
+        mu_topic_stats.extend(experiment_1(
+            exp_mu=mu, num_iter=num_iter, random_state=random_state))
 
-    save_topic_stats('data/experiment_1/mu_stats.csv', mu_topic_stats)
+    save_topic_stats(f'{data_folder}/mu_stats.csv', mu_topic_stats)
 
     tn_topic_stats = []
     all_tn = [10, 20, 30, 40]
     for tn in all_tn:
-        tn_topic_stats.extend(experiment_1(num_topics=tn))
-    save_topic_stats('data/experiment_1/tn_stats.csv', tn_topic_stats)
+        tn_topic_stats.extend(experiment_1(
+            num_topics=tn, num_iter=num_iter, random_state=random_state))
+    save_topic_stats(f'{data_folder}/tn_stats.csv', tn_topic_stats)
 
     plot_from_csv(
-        '../data/experiment_1/mu_stats.csv',
-        '../data/experiment_1',
+        f'{data_folder}/mu_stats.csv',
+        data_folder,
         'mu')
     plot_from_csv(
-        '../data/experiment_1/tn_stats.csv',
-        '../data/experiment_1',
+        f'{data_folder}/tn_stats.csv',
+        data_folder,
         'tn')
 
 

@@ -41,7 +41,7 @@ EXP1_STOPWORDS = STOPWORDS.union(set([
     # remove time words
     'year', 'years', 'thursday', 'yesterday', 'today', 'week',
     'wednesday', 'sunday', 'monday', 'day', 'thursday', 'tonight',
-    'tuesday'
+    'tuesday', 'time'
 ]
 ))
 

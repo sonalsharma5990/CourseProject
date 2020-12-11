@@ -1,5 +1,6 @@
 """Creates output plots."""
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 import numpy as np
 import pandas as pd
 
@@ -16,9 +17,18 @@ def plot_causal_purity(
     ax = axes[0]
     markers = ['d', 's', '^', 'x', '*']
     for i, (value, causal) in enumerate(avg_causal.items()):
-        ax.plot(causal, label=f'{label_prefix}{value}', marker=markers[i])
+        ax.plot(
+            range(
+                1,
+                iterations + 1),
+            causal,
+            label=f'{label_prefix}{value}',
+            marker=markers[i])
     ax.set_xlabel('Iteration', weight='bold')
-    # ax.set_xticks(range(1,7))
+    # ax.set_xlim(0, 6)
+    # ax.set_xticks(range(1,6))
+    # ax.set_xlim([1,5])
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax.yaxis.grid()
     if yticks_causal is None:
         yticks_causal = np.arange(95.5, 100.5, .5)
@@ -28,8 +38,15 @@ def plot_causal_purity(
 
     ax = axes[1]
     for i, (value, purity) in enumerate(avg_purity.items()):
-        ax.plot(purity, label=f'{label_prefix}{value}', marker=markers[i])
+        ax.plot(
+            range(
+                1,
+                iterations + 1),
+            purity,
+            label=f'{label_prefix}{value}',
+            marker=markers[i])
     ax.set_xlabel('Iteration', weight='bold')
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax.yaxis.grid()
     ax.set_ylabel('Average Purity', weight='bold')
     # ax.set_xticks(range(1, 7))
@@ -38,7 +55,9 @@ def plot_causal_purity(
         yticks_purity = np.arange(0, 125, 20)
     ax.set_yticks(yticks_purity)
     # plt.show()
+
     plt.legend(bbox_to_anchor=(1, 0.5), loc='center left', ncol=1)
+
     fig.tight_layout()
     plt.savefig(outfile)
 
@@ -79,6 +98,8 @@ def plot_from_csv(filename, data_folder, plot_type='mu'):
     avg_causality = {}
     avg_purity = {}
 
+    iterations = 0
+
     keys = pd.unique(csv_data[plot_type])
     # print(keys)
 
@@ -87,7 +108,8 @@ def plot_from_csv(filename, data_folder, plot_type='mu'):
                                     == k]['avg_significance'].to_numpy()
         avg_purity[k] = csv_data[csv_data[plot_type]
                                  == k]['avg_purity'].to_numpy()
-        # iterations = np.max(csv_data[csv_data[plot_type] == k]['avg_purity'].to_numpy())
+        iterations = max(
+            np.max(csv_data[csv_data[plot_type] == k]['iteration']), iterations)
 
     causality_min = csv_data['avg_significance'].min()
     causality_max = csv_data['avg_significance'].max()
@@ -110,7 +132,7 @@ def plot_from_csv(filename, data_folder, plot_type='mu'):
     plot_causal_purity(
         avg_causality,
         avg_purity,
-        0,
+        iterations,
         out_file,
         label_prefix,
         yticks_causal,
