@@ -88,10 +88,10 @@ def print_word_significance(old_topics, dictionary):
     headers = ['WORD', 'IMPACT', 'SIG (%)']
     table = []
     for topic_word_sig, topic_words in old_topics:
-        print(topic_word_sig.shape)
-        sorted_index = np.argsort(-topic_word_sig[:, 2])
-        for i in sorted_index:
-            word_index = topic_words[i]
+        # print(topic_word_sig.shape)
+        # sorted_index = np.argsort(-topic_word_sig[:, 2])
+        for i, word_index in enumerate(topic_words):
+            # word_index = topic_words[i]
             impact = '+'
             if topic_word_sig[i][2] < 0:
                 impact = '-'
