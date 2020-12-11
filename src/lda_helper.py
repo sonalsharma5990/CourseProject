@@ -20,12 +20,13 @@ EXP1_STOPWORDS = STOPWORDS.union(set([
     # remove names of candidates as they are frequently used
     'george', 'bush', 'dick', 'cheney',
     'gore', 'lieberman', 'mrs', 'clinton',
-    'ralph', 'nader',
+    'ralph', 'nader', 'mccain',
 
     # remove common political words during presendtial compaign
     'president', 'vice', 'campaign', 'campaigns',
     'debate', 'debates', 'convention', 'presidential', 'party',
     'gov', 'governor', 'governors', 'state', 'political', 'voters',
+    'candidate', 'candidates', 'senator', 'states',
 
     # remove parties
     'democrat', 'democrats', 'democratic', 'republican', 'republicans',
@@ -34,14 +35,14 @@ EXP1_STOPWORDS = STOPWORDS.union(set([
     'new', 'york', 'florida', 'texas',
 
     # remove common verbs and words
-    'says', 'said', 'told', 'asked', 'calls', 'called', 'think',
+    'says', 'said', 'saying', 'told', 'asked', 'calls', 'called', 'think',
     'people', 'speech', 'plan', 'thing', 'like', 'went', 'view',
-    'vote', 'votes', 'taken',
+    'vote', 'votes', 'taken', 'running', 'want', 'percent',
 
     # remove time words
     'year', 'years', 'thursday', 'yesterday', 'today', 'week',
     'wednesday', 'sunday', 'monday', 'day', 'thursday', 'tonight',
-    'tuesday', 'time'
+    'tuesday', 'time', 'night'
 ]
 ))
 

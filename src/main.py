@@ -66,20 +66,18 @@ def load_corpus(data_folder):
 
 def train_lda_model(
         corpus, num_topics, iter_i,
-        eta=None, mu=0, load_saved=False,
-        random_state=None):
+        data_folder,
+        eta=None, mu=0, load_saved=False):
     if load_saved:
-        lda_model = LdaModel.load(f'../data/experiment_1/lda_model_{iter_i}')
+        lda_model = LdaModel.load(f'{data_folder}/lda_model_{iter_i}')
     else:
         lda_model = LdaMulticore(corpus, num_topics=num_topics,
                                  id2word=corpus.dictionary,
                                  passes=10,
                                  iterations=100,
                                  decay=mu,
-                                 # minimum_probability=0,
-                                 random_state=random_state,
                                  eta=eta)
-        # lda_model.save(f'experiment_1/lda_model_{iter_i}')
+        # lda_model.save(f'{data_folder}/lda_model_{iter_i}')
     logger.info('LDA model built.')
     return lda_model
 
@@ -107,8 +105,7 @@ def process_exp1(lda_model, corpus, doc_date_matrix, nontext_series,
 
 
 def experiment_1(exp_mu=50, num_topics=30,
-                 num_iter=5, load_saved=False,
-                 random_state=None):
+                 num_iter=5, load_saved=False):
     data_folder = '../data/experiment_1'
     corpus = load_corpus(data_folder)
     doc_date_matrix, nontext_series = get_nontext_series(data_folder)
@@ -125,8 +122,8 @@ def experiment_1(exp_mu=50, num_topics=30,
         print('Iteration', i + 1)
         lda_model = train_lda_model(
             corpus, num_topics, i,
-            eta=eta, mu=mu, load_saved=load_saved,
-            random_state=random_state)
+            data_folder,
+            eta=eta, mu=mu, load_saved=load_saved)
         eta, avg_sigf, avg_purity = process_exp1(
             lda_model, corpus, doc_date_matrix, nontext_series,
             num_docs, num_topics)
@@ -139,11 +136,8 @@ def experiment_1(exp_mu=50, num_topics=30,
     return topic_stats
 
 
-def experiment_1_eval(num_iter=5, random_state=None):
-    # set a random state for lda model, so that all iterations are consistent
-    if random_state is None:
-        random_state = random.randint(10000, 99999)
-    logger.info('Random seed for evaulation: %s', random_state)
+def experiment_1_eval(num_iter=5):
+    """Create dataset and graph for experiment_1 evaluation."""
     data_folder = '../data/experiment_1'
     all_mu = [10, 50, 100, 500, 1000]
     mu_topic_stats = []
