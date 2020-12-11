@@ -149,7 +149,6 @@ def experiment_1_eval():
 
 
 if __name__ == '__main__':
-    command = ''
     if sys.argv[1:]:
         command = sys.argv[1].strip()
         if command == 'retrain':
@@ -169,4 +168,5 @@ if __name__ == '__main__':
                 'python main.py graph   '
                 '# retrain model and run timeseries feedback to produce graphs.')
             exit(1)
-    experiment_1(load_saved=True)
+    else:
+        experiment_1(load_saved=True)
