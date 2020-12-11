@@ -104,6 +104,22 @@ https://github.com/sonalsharma5990/CourseProject/tree/main/data/README.md
 
 
 #### Final Results:
+## Significant Topics 2000 Presidential Election
+
+| TOP 3 WORDS IN SIGNIFICANT TOPICS    |
+|------------------------------|
+| **tax** lazio house              |
+| national know administration |
+| ***tax*** aides advisers           |
+| **security social** american     |
+| officials aides american     |
+| ***medicare tax security***        |
+| ***tax*** federal polls            |
+| national house ***tax***           |
+| ***abortion*** american national   |
+| ***drug*** american ***tax***            |
+
+
 
 ## Quantitative Evaluation Results
 
