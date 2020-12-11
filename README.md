@@ -1,5 +1,13 @@
 # Iterative Topic Modeling Framework with Time Series Feedback
 
+## Authors
+
+| Name                       | NetId                 |
+| -------------------------- | --------------------- |
+| Maneesh Kumar Singh        | mksingh4@illinois.edu |
+| Sonal Sharma               | sonals3@illinois.edu  |
+| Kamlesh Chegondi           | kamlesh2@illinois.edu |
+
 ## Algorithm
 ### Parameters
 #### Time series data
