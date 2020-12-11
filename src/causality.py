@@ -10,7 +10,7 @@
 # apply stationary
 # get rid of dates (Yes)
 
-## make time series stationary by
+# make time series stationary by
 # To make the
 # input series stationary, we smooth with a moving average filter with
 # window size 3 (average with adjacent values) and use first differ-
