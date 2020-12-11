@@ -95,7 +95,7 @@ def get_document_topic_prob(lda_model, corpus, num_docs, num_topics):
 def print_lda_topics(lda_model, num_topics, max_words=10):
     topics = lda_model.show_topics(num_topics=num_topics,
                                    num_words=max_words, formatted=False)
-    print('*' * 72)
+    print('')
     flat_table = []
     headers = [f'LDA TOP {max_words} WORDS IN TOPICS']
     for topic_id, words_idx in topics:

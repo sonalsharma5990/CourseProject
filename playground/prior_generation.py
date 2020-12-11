@@ -10,6 +10,9 @@ from print_utils import (
     print_word_significance,
     print_topic_word_prob,
     print_top_topics)
+from measure_of_quality import (
+    calculate_average_purity,
+    calculate_average_significance)
 
 
 logger = logging.getLogger(__name__)
@@ -213,8 +216,8 @@ def process_topic_causality(
     """Get significance and probability for topic words."""
     top_significant_topics = get_top_topics(topic_significance)
 
-    print_lda_top_topics(
-        lda_model, top_significant_topics, corpus.dictionary)
+    # print_lda_top_topics(
+    #     lda_model, top_significant_topics, corpus.dictionary)
 
     # topic_lag = get_topic_lag(topic_significance, top_significant_topics)
     # print('topic lag', topic_lag)
@@ -241,8 +244,13 @@ def process_topic_causality(
     print_topic_word_prob(new_topics, corpus.dictionary)
 
     # print significant topics with significant words
-    print_top_topics(new_topics, corpus.dictionary, max_words=10)
+    # print_top_topics(new_topics, corpus.dictionary, max_words=10)
 
-    return get_new_topic_word_prob(
+    avg_sigf = calculate_average_significance(old_topics)
+    avg_purity = calculate_average_purity(old_topics)
+    logger.debug('average sigf: %s, avg purity: %s', avg_sigf, avg_purity)
+
+    eta = get_new_topic_word_prob(
         new_topics, len(
             corpus.dictionary), num_topics)
+    return eta, avg_sigf, avg_purity

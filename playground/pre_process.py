@@ -194,6 +194,12 @@ def match_dates(iem_df, doc_dates):
     return fill_missing_dates_by_future(iem_df, missing_dates)
 
 
+def save_topic_stats(filename, topic_stats):
+    columns = ['mu', 't_n', 'iteration', 'avg_significance', 'avg_purity']
+    df = pd.DataFrame(topic_stats, columns=columns)
+    df.to_csv(filename, index=False)
+
+
 if __name__ == '__main__':
     # filter_doc(None, None)
     out_dir = 'experiment_1'

@@ -83,6 +83,7 @@ def sort_word_signficance(
 
 def print_word_significance(old_topics, dictionary):
     """Print word significance by topic."""
+    print('')
     words_index = [i for _, topic_words in old_topics
                    for i in topic_words]
     filler_word = '-' * get_largest_word_len(words_index, dictionary)
