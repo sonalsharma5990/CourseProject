@@ -107,10 +107,10 @@ def print_word_significance(old_topics, dictionary):
         positive_impact = topic_word_sig[:, 2] > 0
         negative_impact = topic_word_sig[:, 2] < 0
         table.extend(sort_word_signficance(
-            topic_word_sig, topic_words, 
+            topic_word_sig, topic_words,
             positive_impact, '+', dictionary))
         table.extend(sort_word_signficance(
-            topic_word_sig, topic_words, 
+            topic_word_sig, topic_words,
             negative_impact, '-', dictionary))
         # for i in topic_words:
 

@@ -63,16 +63,16 @@ def process_exp1(corpus, doc_date_matrix, nontext_series,
                  num_docs, num_topics, iteration,
                  eta=None, mu=0):
     """Process experiment-1."""
-    # lda_model = LdaMulticore(corpus, num_topics=num_topics,
-    #                          id2word=corpus.dictionary,
-    #                          passes=10,
-    #                          iterations=100,
-    #                          decay=mu,
-    #                          # minimum_probability=0,
-    #                          # random_state=98765432,
-    #                          eta=eta)
-    # lda_model.save(f'experiment_1/lda_model_{iteration}')
-    lda_model = LdaModel.load(f'experiment_1/lda_model')
+    lda_model = LdaMulticore(corpus, num_topics=num_topics,
+                             id2word=corpus.dictionary,
+                             passes=10,
+                             iterations=100,
+                             decay=mu,
+                             # minimum_probability=0,
+                             # random_state=98765432,
+                             eta=eta)
+    lda_model.save(f'experiment_1/lda_model_{iteration}')
+    # lda_model = LdaModel.load(f'experiment_1/lda_model')
     logger.info('LDA model built.')
     print_lda_topics(lda_model, num_topics)
 
@@ -102,7 +102,7 @@ def experiment_1():
     mu = 0
     num_topics = 30
     num_docs = sum(1 for _ in corpus)
-    for i in range(1):
+    for i in range(5):
         logger.info('Processing iteration %s with t_n %s and mu %s',
                     i + 1, num_topics, mu)
         print('Iteration', i + 1)
@@ -113,10 +113,12 @@ def experiment_1():
             i,
             eta=eta,
             mu=mu)
-        if eta is not None:
-            mu = 50
-            logger.debug('ETA shape %s', eta.shape)
-            num_topics = eta.shape[0]
+        # print(np.sum(eta, axis=1))
+        mu = 50
+        # if eta is not None:
+        #     mu = 50
+        #     logger.debug('ETA shape %s', eta.shape)
+        #     # num_topics = eta.shape[0]
 
 
 if __name__ == '__main__':

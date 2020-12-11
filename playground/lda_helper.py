@@ -18,28 +18,30 @@ from gensim.parsing.preprocessing import (
 # remove words not adding any value to topics found.
 EXP1_STOPWORDS = STOPWORDS.union(set([
     # remove names of candidates as they are frequently used
-    # 'george', 'bush', 'dick', 'cheney',
-    # 'gore', 'lieberman', 'mrs', 'clinton',
-    # 'ralph', 'nader',
+    'george', 'bush', 'dick', 'cheney',
+    'gore', 'lieberman', 'mrs', 'clinton',
+    'ralph', 'nader',
 
-    # # remove political jargon words
-    # 'president', 'vice', 'campaign', 'campaigns',
-    # 'debate', 'debates', 'convention', 'presidential', 'party',
-    # 'gov', 'governor', 'state', 'political',
+    # remove common political words during presendtial compaign
+    'president', 'vice', 'campaign', 'campaigns',
+    'debate', 'debates', 'convention', 'presidential', 'party',
+    'gov', 'governor', 'governors', 'state', 'political', 'voters',
 
-    # # remove parties
-    # 'democrat', 'democrats', 'democratic', 'republican', 'republicans',
+    # remove parties
+    'democrat', 'democrats', 'democratic', 'republican', 'republicans',
 
-    # # remove states
-    # 'new', 'york', 'florida', 'texas',
+    # remove states
+    'new', 'york', 'florida', 'texas',
 
-    # # remove common verbs and words
-    # 'says', 'said', 'told', 'asked', 'calls', 'called', 'think',
-    # 'people', 'speech', 'plan', 'thing', 'like',
+    # remove common verbs and words
+    'says', 'said', 'told', 'asked', 'calls', 'called', 'think',
+    'people', 'speech', 'plan', 'thing', 'like', 'went', 'view',
+    'vote', 'votes', 'taken',
 
-    # # remove time words
-    # 'year', 'years', 'thursday', 'yesterday', 'today',
-    # 'wednesday', 'sunday', 'monday', 'day', 'thursday', 'tonight'
+    # remove time words
+    'year', 'years', 'thursday', 'yesterday', 'today', 'week',
+    'wednesday', 'sunday', 'monday', 'day', 'thursday', 'tonight',
+    'tuesday'
 ]
 ))
 
