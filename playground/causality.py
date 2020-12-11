@@ -99,9 +99,11 @@ def calculate_significance(
 
 
 def calculate_topic_significance(
-        topics, common_dates, nontext_series, lag=5, method='granger'):
+        topics, doc_date_matrix, nontext_series, lag=5, method='granger'):
     """Calculate topic significance based on lag and method."""
-    time_series = topics.T @ common_dates
+    time_series = topics.T @ doc_date_matrix
+    # print(time_series.shape)
+    # return time_series
     return calculate_significance(
         time_series,
         nontext_series,
@@ -109,7 +111,11 @@ def calculate_topic_significance(
         method=method)
 
 
+
+
 def calculate_topic_significance_seq(doc_topic_prob, doc_date):
+    """Calculate topic significance using for loop."""
+
     # get dates from experiment1 data
     # get dates form IEM data
     # compare if any date missing
