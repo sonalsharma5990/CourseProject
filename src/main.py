@@ -16,7 +16,8 @@ from pre_process import (
 from utils import get_adjacency_matrix
 from causality import calculate_topic_significance
 from prior_generation import process_topic_causality
-from timeseries import create_theta_timeseries
+# from timeseries import create_theta_timeseries
+from out_plot import plot_from_csv
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -66,7 +67,7 @@ def train_lda_model(
         corpus, num_topics, iter_i,
         eta=None, mu=0, load_saved=False):
     if load_saved:
-        lda_model = LdaModel.load(f'experiment_1/lda_model_{iter_i}')
+        lda_model = LdaModel.load(f'../data/experiment_1/lda_model_{iter_i}')
     else:
         lda_model = LdaMulticore(corpus, num_topics=num_topics,
                                  id2word=corpus.dictionary,
@@ -104,7 +105,7 @@ def process_exp1(lda_model, corpus, doc_date_matrix, nontext_series,
 
 
 def experiment_1(exp_mu=50, num_topics=30, load_saved=False):
-    data_folder = 'data/experiment_1'
+    data_folder = '../data/experiment_1'
     corpus = load_corpus(data_folder)
     doc_date_matrix, nontext_series = get_nontext_series(data_folder)
     num_docs = sum(1 for _ in corpus)
@@ -146,6 +147,15 @@ def experiment_1_eval():
     for tn in all_tn:
         tn_topic_stats.extend(experiment_1(num_topics=tn))
     save_topic_stats('data/experiment_1/tn_stats.csv', tn_topic_stats)
+
+    plot_from_csv(
+        '../data/experiment_1/mu_stats.csv',
+        '../data/experiment_1',
+        'mu')
+    plot_from_csv(
+        '../data/experiment_1/tn_stats.csv',
+        '../data/experiment_1',
+        'tn')
 
 
 if __name__ == '__main__':
