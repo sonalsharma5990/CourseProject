@@ -111,8 +111,6 @@ def calculate_topic_significance(
         method=method)
 
 
-
-
 def calculate_topic_significance_seq(doc_topic_prob, doc_date):
     """Calculate topic significance using for loop."""
 
