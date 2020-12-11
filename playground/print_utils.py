@@ -70,9 +70,10 @@ def sort_word_signficance(
         word_sigf, topic_words, filter, impact, dictionary):
     """Sort words by significance."""
     word_sigf = word_sigf[filter, :]
+    topic_words = topic_words[filter]
     table = []
     sorted_index = np.argsort(-word_sigf[:, 1])
-    sorted_index = range(len(word_sigf))
+    # sorted_index = range(len(word_sigf))
     for i in sorted_index:
         word_index = topic_words[i]
         sig_per = int(word_sigf[i][1] * 100)
@@ -90,27 +91,27 @@ def print_word_significance(old_topics, dictionary):
     for topic_word_sig, topic_words in old_topics:
         # print(topic_word_sig.shape)
         # sorted_index = np.argsort(-topic_word_sig[:, 2])
-        for i, word_index in enumerate(topic_words):
-            # word_index = topic_words[i]
-            impact = '+'
-            if topic_word_sig[i][2] < 0:
-                impact = '-'
-            word_sig = int(topic_word_sig[i][1] * 100)
-            table.append([dictionary[word_index], impact, word_sig])
+        # for i, word_index in enumerate(topic_words):
+        #     # word_index = topic_words[i]
+        #     impact = '+'
+        #     if topic_word_sig[i][2] < 0:
+        #         impact = '-'
+        #     word_sig = int(topic_word_sig[i][1] * 100)
+        #     table.append([dictionary[word_index], impact, word_sig])
 
         # for i in range(topic_word_sig):
         # if topic_word_sig[:, 2] > 0:
         #     impact = '+'
         # else:
         #     impact = '-'
-        # positive_impact = topic_word_sig[:, 2] > 0
-        # negative_impact = topic_word_sig[:, 2] < 0
-        # table.extend(sort_word_signficance(
-        #     topic_word_sig, topic_words, 
-        #     positive_impact, '+', dictionary))
-        # table.extend(sort_word_signficance(
-        #     topic_word_sig, topic_words, 
-        #     negative_impact, '-', dictionary))
+        positive_impact = topic_word_sig[:, 2] > 0
+        negative_impact = topic_word_sig[:, 2] < 0
+        table.extend(sort_word_signficance(
+            topic_word_sig, topic_words, 
+            positive_impact, '+', dictionary))
+        table.extend(sort_word_signficance(
+            topic_word_sig, topic_words, 
+            negative_impact, '-', dictionary))
         # for i in topic_words:
 
         table.append([filler_word, '--------', '---------'])
