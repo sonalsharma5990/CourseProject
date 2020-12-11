@@ -59,7 +59,73 @@ k potentially causal topics
 no more significant topic change). When the process stops, CT is the output causal topic
 list.
 
-### Instructions for running the code:
+## How to run?
+
+This program has been tested for python 3.8.5. It may work for older version of python 
+(>=3.6), but was not tested. Here are the instructions to run this program.
+
+### Initial Setup
+This program can be run with or without virtual environment setup. However virtual
+environment is highly recommended. Below are the steps required for Ubuntu 20.04.1 LTS.
+```bash
+# install virtualenvwrapper
+pip3 install virtualenvwrapper --user
+
+# Setup virtualenvwrapper path if not already done
+export PATH="$HOME/.local/bin:$PATH"
+
+# If python3 is aliased on your system, you need to
+# setup environment variable for virtualenvwrapper to
+# know where to pick python
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+
+# Source virtualenvwrapper.sh so that all helper
+# commands are added to path
+source ~/.local/bin/virtualenvwrapper.sh
+
+# Make virtualenv. *demo* can be any name.
+mkvirtualenv demo
+
+# Clone the repository
+git clone https://github.com/sonalsharma5990/CourseProject.git
+
+# install dependencies
+cd CourseProject/src
+pip install -r requirements.txt
+```
+
+### Run program
+
+There are three options to run the program.
+
+```bash
+# Below command uses the saved model to find significant topics
+# and words. As it does not need to train the model, it is the fastest
+# option and finishes in less than 5 minutes.
+python main.py
+
+# You can also train the model again. Below command trains the model
+# using the prior strength mu and eta (topic_word_prob) for 5 iterations.
+# Please note currently it is not possible to set the mu, eta or
+# number of iteration options from command line. These must be changed in
+# code.
+# As this option trains the model five times (five iterations). It takes 12 to 
+# 15 minutes to run the program.
+python main.py retrain
+
+# You can run topic causal modeling for various prior strength (mu) and
+# number of clusters (tn), as mentioned in the section 5.2.2 Quantitative
+# evaluation results. This generates graphs between various mu, tn and average
+# causal significance and purity. As this program runs model training
+# for each mu/tn combination five times. This takes 40 minutes to run on
+# a large AWS EC2 instance.
+python main.py graph
+
+```
+
+
+
+
 https://github.com/sonalsharma5990/CourseProject/tree/main/src/README.md
 
 ### DataSet
