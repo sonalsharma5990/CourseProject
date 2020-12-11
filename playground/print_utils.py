@@ -40,13 +40,13 @@ def print_topic_word_prob(new_topics, dictionary):
     flat_table = []
     print('')
     for index, prob in new_topics:
-        # sorted_i = np.argsort(-prob)
-        # sorted_prob = -np.sort(-prob)
-        # sorted_prob = np.round(sorted_prob, 2)
-        sorted_prob = np.round(prob, 2)
+        sorted_i = np.argsort(-prob)
+        sorted_prob = -np.sort(-prob)
+        sorted_prob = np.round(sorted_prob, 2)
+        # sorted_prob = np.round(prob, 2)
         for i, prob_item in enumerate(sorted_prob):
             flat_table.append(
-                [dictionary[index[i]], prob_item])
+                [dictionary[index[sorted_i[i]]], prob_item])
         flat_table.append([filler_word, '------'])
     print(tabulate(flat_table, headers, tablefmt='github'))
 
