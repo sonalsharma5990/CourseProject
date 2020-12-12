@@ -41,6 +41,10 @@ nontext timeseries.
   - [DataSet](#dataset)
     - [NYT Corpus data](#nyt-corpus-data)
     - [IEM 2000 Winner takes all data](#iem-2000-winner-takes-all-data)
+    - [Data preprocessing](#data-preprocessing)
+      - [NY Times Corpus](#ny-times-corpus)
+      - [IEM Winner takes all data](#iem-winner-takes-all-data)
+      - [Handling of missing data](#handling-of-missing-data)
   - [Major Features](#major-features)
   - [Hurdles and Ladders](#hurdles-and-ladders)
   - [Final Results](#final-results)
@@ -205,6 +209,7 @@ The data for each month was selected using dropdown and copied to a spreadsheet.
 2000 presidential election campaign experiment required NY Times corpus and IEM Winner Takes all data from May-2000 to Oct-2000. In additional NY Times corpus data is in XML so it was required to parse and extract required component. We wrote pre_processing.py module to take care for both tasks. It performs following tasks
 
 #### NY Times Corpus
+
 - Using lxml library, extact body of NY corpus dataset between 01-May-2000 to 31-Oct-2000.
 - Check if body contains Gore or Bush, If yes extract only the paragraph containing Bush and Gore.
 - Combine all paragraphs for single article and write it as a single line
@@ -214,6 +219,7 @@ The data for each month was selected using dropdown and copied to a spreadsheet.
   in order to count documents/words for causal processing.
 
 #### IEM Winner takes all data
+
 - Using pandas, the IEM Winner takes CSV is read
 - Filter dates between 01-May-2000 to 31-Oct-2000.
 - Using Gore as baseline, the LastPrice column is normalized
