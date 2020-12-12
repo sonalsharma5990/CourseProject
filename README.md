@@ -2,6 +2,13 @@
 
 ## Team : BestBots
 
+## Abstract
+As part of our final project for CS410 Information To Text systems, we are reproducing paper "Topic Modeling Framework with Time Series Feedback".
+We followed the steps and algorithm as mentioned in the paper and were able to get results which are very similar to results provided in the paper.
+With this project, we learnt about Topic Modeling and how topic modeling combined with TimeSeries feedback can be used to explain the relation between text and
+nontext timeseries.
+
+
 ## Authors
 
 | Name                | NetId                 |
@@ -147,7 +154,17 @@ python main.py graph
 
 ### DataSet
 
-https://github.com/sonalsharma5990/CourseProject/tree/main/data/README.md
+#### NYT Corpus data
+
+New York Times corpus was provided by TA's based on request by each team member. In order to run the program, the provided nyt_corpus_LDC2008T19.tgz should be in the data folder on local computer. The dataset due to its huge size and access restriction is not included in this repository.
+Stock price data
+
+#### IEM 2000 Winner takes all data
+
+The data from May-2000 to Nov-2000 was manually selected from IEM Website IEM 2000 U.S. Presidential Election: Winner-Takes-All Market
+
+The data for each month was selected using dropdown and copied to a spreadsheet. After data for all months have been collected, the spreadsheet is saved as an CSV file.
+
 
 ### Major Features
 
