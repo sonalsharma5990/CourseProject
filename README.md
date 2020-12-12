@@ -2,8 +2,7 @@
 
 ## Abstract
 
-As part of our final project for CS410 Text Information Systems, we are reproducing paper "Topic Modeling Framework with Time Series Feedback".
-We followed the steps and algorithm as mentioned in the paper and were able to get results which are very similar to results provided in the paper.
+As part of our final project for CS410 Text Information Systems, we are reproducing paper "Topic Modeling Framework with Time Series Feedback". We chose to reproduce experiment of *2000 U.S. Presidential election campaign* due to its low data size. We followed the steps and algorithm as mentioned in the paper and were able to get results which are very similar to results provided in the paper.
 With this project, we learnt about Topic Modeling and how topic modeling combined with TimeSeries feedback can be used to explain the relation between text and
 nontext timeseries.
 
@@ -39,16 +38,20 @@ nontext timeseries.
   - [How to run?](#how-to-run)
     - [Initial Setup](#initial-setup)
     - [Run program](#run-program)
-    - [DataSet](#dataset)
-      - [NYT Corpus data](#nyt-corpus-data)
-      - [IEM 2000 Winner takes all data](#iem-2000-winner-takes-all-data)
-    - [Major Features](#major-features)
-    - [Hurdles and Ladders:](#hurdles-and-ladders)
+  - [DataSet](#dataset)
+    - [NYT Corpus data](#nyt-corpus-data)
+    - [IEM 2000 Winner takes all data](#iem-2000-winner-takes-all-data)
+  - [Major Features](#major-features)
+  - [Hurdles and Ladders](#hurdles-and-ladders)
   - [Final Results](#final-results)
     - [Significant Topics 2000 Presidential Election](#significant-topics-2000-presidential-election)
     - [Quantitative Evaluation Results](#quantitative-evaluation-results)
   - [Conclusion](#conclusion)
   - [Acknowledgments](#acknowledgments)
+  - [References](#references)
+  - [Appendix](#appendix)
+    - [Evaluation System](#evaluation-system)
+    - [Software/Tools used](#softwaretools-used)
 
 ## Algorithm
 
@@ -185,21 +188,20 @@ python main.py graph
 
 ```
 
-### DataSet
+## DataSet
 
-#### NYT Corpus data
+### NYT Corpus data
 
 New York Times corpus was provided by TA's based on request by each team member. In order to run the program, the provided nyt_corpus_LDC2008T19.tgz should be in the data folder on local computer. The dataset due to its huge size and access restriction is not included in this repository.
 Stock price data
 
-#### IEM 2000 Winner takes all data
+### IEM 2000 Winner takes all data
 
 The data from May-2000 to Nov-2000 was manually selected from IEM Website IEM 2000 U.S. Presidential Election: Winner-Takes-All Market
 
 The data for each month was selected using dropdown and copied to a spreadsheet. After data for all months have been collected, the spreadsheet is saved as an CSV file.
 
-
-### Major Features
+## Major Features
 
    1) Gaining access to New York Times Corpus dataset and parallel time series from Yahoo Finance.  
    2) Finding the libraries required for implementation  
@@ -214,8 +216,7 @@ The data for each month was selected using dropdown and copied to a spreadsheet.
    11) Apply LDA to Documents using prior obtained  
    12) Repeat until satisfying stopping criteria (e.g. reach topic quality at some point, no more significant topic change).  
 
-
-### Hurdles and Ladders:
+## Hurdles and Ladders
 
 1) Algorithm to implement Topic Modelling:  
    We had a tough call between PLSA and LDA here.  
@@ -224,18 +225,19 @@ The data for each month was selected using dropdown and copied to a spreadsheet.
 
 2) Missing data for some dates in Non-text series  
    We have used future value in this case after research.To justify the same, in case of stock data in week 9/11, we would miss the impact in stock if using previous values.
- 
+
 3) Granger Test to determine causality relationship  
    We used 1- p value for score which amounts to almost 0 values getting 100% score.
 
 4) Add customized stop words in data preprocessing  
-   We removed words that were not adding any value to topics found.  
-      * names of candidates as they are frequently used  
-      * political words
-      * parties
-      * states
-      * common verbs and words
-      * time words
+   We removed words that were not adding any value to topics found.
+
+   - names of candidates as they are frequently used
+   - political words
+   - parties
+   - states
+   - common verbs and words
+   - time words
 
 ## Final Results
 
@@ -285,3 +287,26 @@ We would like to thank Professor ChengXiang Zhai for a great course and guidance
 We would also like to thank our TAs for always being available for any questions and issues. We are also
 greatful for fellow students on Piazza and Slack for motivation and fruitful discussion in
 completing this project.
+
+## References
+
+- [Kim et al. 13] *Hyun DukKim, MaluCastellanos, MeichunHsu, ChengXiangZhai, Thomas Rietz, and Daniel Diermeier*. 2013. [Mining causal topics in text data: Iterative topic modeling with time series feedback](https://dl.acm.org/doi/10.1145/2505515.2505612). In Proceedings of the 22nd ACM international conference on information & knowledge management(CIKM 2013). ACM, New York, NY, USA, 885-890. DOI=10.1145/2505515.2505612
+
+## Appendix
+
+### Evaluation System
+
+The algorithm was evaluated on AWS EC2 c5.12xLarge Ubuntu instance.
+
+### Software/Tools used
+
+   | Tool           | Usage                     | Version | Link                                            |
+   | -------------- | ------------------------- | ------- | ----------------------------------------------- |
+   | Python         | Programming language      | 3.8.5   | <https://www.python.org/>                       |
+   | statsmodel     | Granger Test              | 0.12.1  | <https://www.statsmodels.org/stable/index.html> |
+   | gensim library | LDA topic modeling        | 3.8.3   | <https://radimrehurek.com/gensim/>              |
+   | Pandas         | CSV and data processing   | 1.1.5   | <https://pandas.pydata.org/>                    |
+   | NumPy          | Array/Matrix Manipulation | 1.19.4  | <https://numpy.org/>                            |
+   | Tabulate       | Printing results in table | 0.8.7   | <https://github.com/astanin/python-tabulate>    |
+   | lxml           | Parse NY Times xml corpus | 4.6.2   | <https://pypi.org/project/lxml/>                |
+   | Matplotlib     | Draw evaluation plots     | 3.3.3   | <https://pypi.org/project/matplotlib/>          |
