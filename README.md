@@ -3,7 +3,7 @@
 ## Team : BestBots
 
 ## Abstract
-As part of our final project for CS410 Information To Text systems, we are reproducing paper "Topic Modeling Framework with Time Series Feedback".
+As part of our final project for CS410 Text Information Systems, we are reproducing paper "Topic Modeling Framework with Time Series Feedback".
 We followed the steps and algorithm as mentioned in the paper and were able to get results which are very similar to results provided in the paper.
 With this project, we learnt about Topic Modeling and how topic modeling combined with TimeSeries feedback can be used to explain the relation between text and
 nontext timeseries.
@@ -227,6 +227,29 @@ during the compaign and we can see our method was able to find some of these maj
 
 ### Quantitative Evaluation Results
 
+As discussed in the paper, we also tried validating our results with various values of prior strength mu and
+numer of topics (tn) with average causality and purity. In the paper, increasing values of mu and tn causes 
+a mostly upward trend in average causality and and purity. Our reproduction however could not see the same 
+relation. We got the highest causality and purity with the initial values of mu and tn and it mostly remains
+constant after that. This is something that we would like to further research.
+
 ![With different mu](./data/experiment_1/mu_graph.png)
 
 ![With different tn](./data/experiment_1/tn_graph.png)
+
+
+## Conclusion
+
+Using Iterative Topic Modeling with Time Series Feedback (ITMTF) for causal topic mining, we were able
+to reproduce the paper. We were able to successfully get topics which were promininet
+in 2000 Presendential Election. We also tried to quantative evaluate the topic mining results and unlike
+paper, our results saw little gain in confidence and purity with increasing values of prior strengh (mu)
+and number of topics(tn). As a future task, the quantitive results need to be further researched and the
+findings can be utlized to improve our algorithm.
+
+## Acknowledgments
+
+We would like to thank Professor ChengXiang Zhai for a great course and guidance to complete this project.
+We would also like to thank our TAs for always being available for any questions and issues. We are also
+greatful for fellow students on Piazza and Slack for motivation and fruitful discussion in
+completing this project.
