@@ -1,21 +1,54 @@
 # Iterative Topic Modeling Framework with Time Series Feedback
 
-## Team : BestBots
-
 ## Abstract
+
 As part of our final project for CS410 Text Information Systems, we are reproducing paper "Topic Modeling Framework with Time Series Feedback".
 We followed the steps and algorithm as mentioned in the paper and were able to get results which are very similar to results provided in the paper.
 With this project, we learnt about Topic Modeling and how topic modeling combined with TimeSeries feedback can be used to explain the relation between text and
 nontext timeseries.
 
-
 ## Authors
+
+### Team BestBots
 
 | Name                | NetId                 |
 | ------------------- | --------------------- |
 | Maneesh Kumar Singh | mksingh4@illinois.edu |
 | Sonal Sharma        | sonals3@illinois.edu  |
 | Kamlesh Chegondi    | kamlesh2@illinois.edu |
+
+## Table of Contents
+
+- [Iterative Topic Modeling Framework with Time Series Feedback](#iterative-topic-modeling-framework-with-time-series-feedback)
+  - [Abstract](#abstract)
+  - [Authors](#authors)
+    - [Team BestBots](#team-bestbots)
+  - [Table of Contents](#table-of-contents)
+  - [Algorithm](#algorithm)
+    - [Parameters](#parameters)
+      - [Time series data](#time-series-data)
+      - [Collection of documents with ts from same period](#collection-of-documents-with-ts-from-same-period)
+      - [Topic modeling method M](#topic-modeling-method-m)
+      - [Causality measure C](#causality-measure-c)
+      - [tn](#tn)
+      - [mu μ](#mu-μ)
+      - [Gamma 𝛾](#gamma-𝛾)
+      - [Delta δ](#delta-δ)
+    - [Output](#output)
+    - [Steps](#steps)
+  - [How to run?](#how-to-run)
+    - [Initial Setup](#initial-setup)
+    - [Run program](#run-program)
+    - [DataSet](#dataset)
+      - [NYT Corpus data](#nyt-corpus-data)
+      - [IEM 2000 Winner takes all data](#iem-2000-winner-takes-all-data)
+    - [Major Features](#major-features)
+    - [Hurdles and Ladders:](#hurdles-and-ladders)
+  - [Final Results](#final-results)
+    - [Significant Topics 2000 Presidential Election](#significant-topics-2000-presidential-election)
+    - [Quantitative Evaluation Results](#quantitative-evaluation-results)
+  - [Conclusion](#conclusion)
+  - [Acknowledgments](#acknowledgments)
 
 ## Algorithm
 
@@ -228,15 +261,14 @@ during the compaign and we can see our method was able to find some of these maj
 ### Quantitative Evaluation Results
 
 As discussed in the paper, we also tried validating our results with various values of prior strength mu and
-numer of topics (tn) with average causality and purity. In the paper, increasing values of mu and tn causes 
-a mostly upward trend in average causality and and purity. Our reproduction however could not see the same 
+numer of topics (tn) with average causality and purity. In the paper, increasing values of mu and tn causes
+a mostly upward trend in average causality and and purity. Our reproduction however could not see the same
 relation. We got the highest causality and purity with the initial values of mu and tn and it mostly remains
 constant after that. This is something that we would like to further research.
 
 ![With different mu](./data/experiment_1/mu_graph.png)
 
 ![With different tn](./data/experiment_1/tn_graph.png)
-
 
 ## Conclusion
 
