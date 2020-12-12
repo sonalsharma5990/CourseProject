@@ -223,7 +223,7 @@ The data for each month was selected using dropdown and copied to a spreadsheet.
 - Using pandas, the IEM Winner takes CSV is read
 - Filter dates between 01-May-2000 to 31-Oct-2000.
 - Using Gore as baseline, the LastPrice column is normalized
-  GorePrice = GorePrice/(GorePrice/BushPrice)
+  GorePrice = GorePrice/(GorePrice + BushPrice)
 - Only date and LastPrice column is kept. As this file is small it is kept in memory for whole run.
 
 #### Handling of missing data
