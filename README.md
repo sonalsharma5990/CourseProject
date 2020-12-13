@@ -23,6 +23,7 @@ nontext timeseries.
   - [Authors](#authors)
     - [Team BestBots](#team-bestbots)
   - [Table of Contents](#table-of-contents)
+  - [Project Video](#project-video)
   - [Algorithm](#algorithm)
     - [Parameters](#parameters)
       - [Time series data](#time-series-data)
@@ -45,7 +46,7 @@ nontext timeseries.
       - [NY Times Corpus](#ny-times-corpus)
       - [IEM Winner takes all data](#iem-winner-takes-all-data)
       - [Handling of missing data](#handling-of-missing-data)
-  - [Major Features](#major-features)
+  - [Implementation](#implementation)
   - [Hurdles and Ladders](#hurdles-and-ladders)
   - [Final Results](#final-results)
     - [Significant Topics 2000 Presidential Election](#significant-topics-2000-presidential-election)
@@ -56,6 +57,10 @@ nontext timeseries.
   - [Appendix](#appendix)
     - [Evaluation System](#evaluation-system)
     - [Software/Tools used](#softwaretools-used)
+
+## Project Video
+
+<https://youtu.be/bP7eKOCasVU>
 
 ## Algorithm
 
@@ -117,9 +122,6 @@ k potentially causal topics
 6. Repeat 2-5 until satisfying stopping criteria (e.g. reach topic quality at some point,
 no more significant topic change). When the process stops, CT is the output causal topic
 list.
-
-## Project Video
-https://youtu.be/bP7eKOCasVU
 
 ## How to run?
 
@@ -235,7 +237,7 @@ On analysis of IEM data with NY Times corpus data, we found that IEM data is mis
 07-Jun-2000, 08-Jun-2000. These dates are filled with values from next (future) available last price which
 was available for 09-Jun-2000.
 
-## Major Features
+## Implementation
 
    1) Gaining access to New York Times Corpus dataset and parallel time series from Yahoo Finance.  
    2) Finding the libraries required for implementation  
@@ -266,12 +268,12 @@ was available for 09-Jun-2000.
 4) Add customized stop words in data preprocessing  
    We removed words that were not adding any value to topics found.
 
-   - names of candidates as they are frequently used
-   - political words
-   - parties
-   - states
-   - common verbs and words
-   - time words
+   - names of candidates as they are frequently used e.g. Bush, Gore
+   - political words e.g. president, presendential
+   - parties e.g. republican, democratic
+   - states e.g. New York, Florida
+   - common verbs and words e.g. said, asked, told, went
+   - time words e.g today, yesterday, wednesday
 
 ## Final Results
 
