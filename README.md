@@ -46,6 +46,7 @@ nontext timeseries.
       - [NY Times Corpus](#ny-times-corpus)
       - [IEM Winner takes all data](#iem-winner-takes-all-data)
       - [Handling of missing data](#handling-of-missing-data)
+      - [Stop words removal](#stop-words-removal)
   - [Implementation](#implementation)
   - [Hurdles and Ladders](#hurdles-and-ladders)
   - [Final Results](#final-results)
@@ -237,20 +238,61 @@ On analysis of IEM data with NY Times corpus data, we found that IEM data is mis
 07-Jun-2000, 08-Jun-2000. These dates are filled with values from next (future) available last price which
 was available for 09-Jun-2000.
 
+#### Stop words removal
+
+On running the topic modeling several times we realized the initial and significant topics are
+dominated by most occured terms in the corpus. E.g. almost every topic had *Bush said* with
+highest probability. We had to either implement some kind of TF-IDF for topic modeling or ignore
+the command words altogther. After some review we decided to go with removal of these words
+from the corpus as stop words.
+
+- names of candidates as they are frequently used e.g. Bush, Gore
+- common political words e.g. president, presendential, campaign
+- parties e.g. republican, democratic
+- states e.g. New York, Florida. These states were home states for the candidates.
+- common verbs and words e.g. said, asked, told, went
+- time words e.g today, yesterday, wednesday
+
 ## Implementation
 
-   1) Gaining access to New York Times Corpus dataset and parallel time series from Yahoo Finance.  
-   2) Finding the libraries required for implementation  
-   3) Perform preprocessing of data  
-   4) Perform LDA on news data set  
-   5) Apply Granger Test to determine causality relationship.  
-   6) For each candidate topic apply Causality measure to find most significant causal words among top words in each Topic.  
-   7) Record the impact values of these significance words using Granger Test lagged coefficients
-   8) Separate positive impact terms and negative impact terms  
-   9) If orientation of words in prior step is very weak, ignore minor group  
-   10) Assign prior probabilities proportions according to significance levels  
-   11) Apply LDA to Documents using prior obtained  
-   12) Repeat until satisfying stopping criteria (e.g. reach topic quality at some point, no more significant topic change).  
+   Our goal was to reproduce experiment-1 involving 2000 U.S. Presidential election campaign.
+   We took the various parameter values as mentioned in the paper to find signfiicant topics
+   in causal analysis. The parameters used are
+      - Number of topics (Tn) = 30
+      - Prior Strength (μ) = 50
+      - Significance Threshold (𝛾) = 95% (0.95)
+      - Delta Threshold (To ignore topic based on impact) (δ) = 10% (0.10)
+      - Number of iterations = 5
+
+   We also tried to analyse our topic modeling results quantitatively. For this we ran our
+   experiment with different values for prior strength μ and number of topics Tn.
+   We fixed Tn = 5 during run for testing different μ.
+
+   μ values tested:  10, 50, 100, 500, 1000
+
+   We fixed prior strength μ = 50 to test different values for Tn.
+
+   Tn values tested: 10, 20, 30, 40
+
+   1) Gensim LDA is used for topic modeling. That represents M in the algorithm.
+      eta parameter was used for priors and delay is used for prior. Delay may
+      not be correct parameter for prior strength, but after weighing other
+      options and discussions with students, we decided to use it. @1378 on Piazza.
+
+   2) Statsmodel library granger test function. This function allowed us to test
+      correlation with different lag. We tried granger test with up to 5 day delay
+      and took the best lag for both topic and word significance.
+
+   3) For impact value, we calculated the average of lagged x coefficients as mentioned
+      in the paper. If the impact was positive, we interpreted as +1 and negative
+      value as -1. As we were only intreseted in most significant topic and words
+      we didn't get a result with 0 impact. We used 1 - p value as significance score.
+
+   4) In order to select Top words for causal analysis, the paper discusses using
+      Mass probability cutoff (ProbM). Its value was not provided. After trying with
+      various values for ProbM we settled on 0.40. This cutoff allowed us to select
+      most important words for causal analysis. Increasing this from 0.40 doesn't
+      give any better results.
 
 ## Hurdles and Ladders
 
