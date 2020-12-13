@@ -4,7 +4,7 @@
 
 As part of our final project for CS410 Text Information Systems, we are reproducing paper "Topic Modeling Framework with Time Series Feedback". We chose to reproduce experiment of *2000 U.S. Presidential election campaign* due to its low data size. We followed the steps and algorithm as mentioned in the paper and were able to get results which are very similar to results provided in the paper.
 With this project, we learnt about Topic Modeling and how topic modeling combined with TimeSeries feedback can be used to explain the relation between text and
-nontext timeseries.
+non-text time series.
 
 ## Authors
 
@@ -109,16 +109,16 @@ k potentially causal topics
 ![Algorithm Steps](./Algorithm.png)
 
 1. Apply M to D to generate tn topics T1,..,TN
-2. Use C to find topics with significane value sig(C,X,T) > gamma(95%)
+2. Use C to find topics with significance value sig(C,X,T) > gamma(95%)
    CT: set of candidates causal topics with lags {(tc1, L1),..,(tck,Lk)}.
 3. For each candidate topic CT, apply C to find most significant
    causal words among top words w subset of T.
    Record the impact values of these significance words (e.g. word-leave Pearson
    correlations with time series variable)
-4. Define a prior on the topic model parms using significant terms and impact values
+4. Define a prior on the topic model parameters using significant terms and impact values
    1. Separate positive impact terms and negative impact terms
       If orientation is very weak ( delta < 10%) ignore minor group
-   2. Assign prior probabilities proporations according to significance levels
+   2. Assign prior probabilities proportions according to significance levels
 5. Apply M to D using prior obtained in step 4.
 6. Repeat 2-5 until satisfying stopping criteria (e.g. reach topic quality at some point,
 no more significant topic change). When the process stops, CT is the output causal topic
@@ -216,7 +216,7 @@ The data for each month was selected using dropdown and copied to a spreadsheet.
 
 #### NY Times Corpus
 
-- Using lxml library, extact body of NY corpus dataset between 01-May-2000 to 31-Oct-2000.
+- Using lxml library, extract body of NY corpus dataset between 01-May-2000 to 31-Oct-2000.
 - Check if body contains Gore or Bush, If yes extract only the paragraph containing Bush and Gore.
 - Combine all paragraphs for single article and write it as a single line
 - NY Times output is gzipped to save space. It is stored as data.txt.gz in data/experiment_1 folder.
@@ -241,13 +241,13 @@ was available for 09-Jun-2000.
 #### Stop words removal
 
 On running the topic modeling several times we realized the initial and significant topics are
-dominated by most occured terms in the corpus. E.g. almost every topic had *Bush said* with
+dominated by most occurred terms in the corpus. E.g. almost every topic had *Bush said* with
 highest probability. We had to either implement some kind of TF-IDF for topic modeling or ignore
-the common words altogther. After some review we decided to go with removal of these words
+the common words altogether. After some review we decided to go with removal of these words
 from the corpus as stop words.
 
 - names of candidates as they are frequently used e.g. Bush, Gore
-- common political words e.g. president, presendential, campaign
+- common political words e.g. president, presidential, campaign
 - parties e.g. republican, democratic
 - states e.g. New York, Florida. These states were home states for the candidates.
 - common verbs and words e.g. said, asked, told, went
@@ -256,13 +256,14 @@ from the corpus as stop words.
 ## Implementation
 
    Our goal was to reproduce experiment-1 involving 2000 U.S. Presidential election campaign.
-   We took the various parameter values as mentioned in the paper to find signfiicant topics
+   We took the various parameter values as mentioned in the paper to find significant topics
    in causal analysis. The parameters used are
-      - Number of topics (Tn) = 30
-      - Prior Strength (μ) = 50
-      - Significance Threshold (𝛾) = 95% (0.95)
-      - Delta Threshold (To ignore topic based on impact) (δ) = 10% (0.10)
-      - Number of iterations = 5
+
+   - Number of topics (Tn) = 30
+   - Prior Strength (μ) = 50
+   - Significance Threshold (𝛾) = 95% (0.95)
+   - Delta Threshold (To ignore topic based on impact) (δ) = 10% (0.10)
+   - Number of iterations = 5
 
    We also tried to analyse our topic modeling results quantitatively. For this we ran our
    experiment with different values for prior strength μ and number of topics Tn.
@@ -285,7 +286,7 @@ from the corpus as stop words.
 
    3) For impact value, we calculated the average of lagged x coefficients as mentioned
       in the paper. If the impact was positive, we interpreted as +1 and negative
-      value as -1. As we were only intreseted in most significant topic and words
+      value as -1. As we were only interested in most significant topic and words
       we didn't get a result with 0 impact. We used 1 - p value as significance score.
 
    4) In order to select Top words for causal analysis, the paper discusses using
@@ -311,7 +312,7 @@ from the corpus as stop words.
    We removed words that were not adding any value to topics found.
 
    - names of candidates as they are frequently used e.g. Bush, Gore
-   - political words e.g. president, presendential
+   - political words e.g. president, presidential
    - parties e.g. republican, democratic
    - states e.g. New York, Florida
    - common verbs and words e.g. said, asked, told, went
@@ -322,8 +323,8 @@ from the corpus as stop words.
 ### Significant Topics 2000 Presidential Election
 
 After training the LDA model for several times, we were able to match few important topics
-of 2000 Presendential election compaign. Tax cut, Healthcare, abortion played a major role
-during the compaign and we can see our method was able to find some of these major topics.
+of 2000 Presidential election campaign. Tax cut, Healthcare, abortion played a major role
+during the campaign and we can see our method was able to find some of these major topics.
 
 | TOP 3 WORDS IN SIGNIFICANT TOPICS |
 | --------------------------------- |
@@ -341,7 +342,7 @@ during the compaign and we can see our method was able to find some of these maj
 ### Quantitative Evaluation Results
 
 As discussed in the paper, we also tried validating our results with various values of prior strength mu and
-numer of topics (tn) with average causality and purity. In the paper, increasing values of mu and tn causes
+number of topics (tn) with average causality and purity. In the paper, increasing values of mu and tn causes
 a mostly upward trend in average causality and and purity. Our reproduction however could not see the same
 relation. We got the highest causality and purity with the initial values of mu and tn and it mostly remains
 constant after that. This is something that we would like to further research.
@@ -353,17 +354,17 @@ constant after that. This is something that we would like to further research.
 ## Conclusion
 
 Using Iterative Topic Modeling with Time Series Feedback (ITMTF) for causal topic mining, we were able
-to reproduce the paper. We were able to successfully get topics which were promininet
-in 2000 Presendential Election. We also tried to quantative evaluate the topic mining results and unlike
-paper, our results saw little gain in confidence and purity with increasing values of prior strengh (mu)
-and number of topics(tn). As a future task, the quantitive results need to be further researched and the
-findings can be utlized to improve our algorithm.
+to reproduce the paper. We were able to successfully get topics which were prominent
+in 2000 Presidential Election. We also tried to quantitative evaluate the topic mining results and unlike
+paper, our results saw little gain in confidence and purity with increasing values of prior strength (mu)
+and number of topics(tn). As a future task, the quantitative results need to be further researched and the
+findings can be utilized to improve our algorithm.
 
 ## Acknowledgments
 
 We would like to thank Professor ChengXiang Zhai for a great course and guidance to complete this project.
 We would also like to thank our TAs for always being available for any questions and issues. We are also
-greatful for fellow students on Piazza and Slack for motivation and fruitful discussion in
+grateful for fellow students on Piazza and Slack for motivation and fruitful discussion in
 completing this project.
 
 ## References
