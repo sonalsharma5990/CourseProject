@@ -179,7 +179,7 @@ Please note currently it is not possible to set the mu, eta or
 number of iteration options from command line. These must be changed in
 code.
 
-As this option trains the model five times (five iterations). It takes 12 to 
+As this option trains the model five times (five iterations). It takes 12 to
 15 minutes to run the program.
 
 ```bash
@@ -243,7 +243,7 @@ was available for 09-Jun-2000.
 On running the topic modeling several times we realized the initial and significant topics are
 dominated by most occured terms in the corpus. E.g. almost every topic had *Bush said* with
 highest probability. We had to either implement some kind of TF-IDF for topic modeling or ignore
-the command words altogther. After some review we decided to go with removal of these words
+the common words altogther. After some review we decided to go with removal of these words
 from the corpus as stop words.
 
 - names of candidates as they are frequently used e.g. Bush, Gore
