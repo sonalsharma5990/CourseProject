@@ -118,6 +118,9 @@ k potentially causal topics
 no more significant topic change). When the process stops, CT is the output causal topic
 list.
 
+## Project Video
+https://youtu.be/bP7eKOCasVU
+
 ## How to run?
 
 This program has been tested for python 3.8.5. It may work for older version of python
