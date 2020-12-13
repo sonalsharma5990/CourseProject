@@ -245,7 +245,7 @@ was available for 09-Jun-2000.
    4) Perform LDA on news data set  
    5) Apply Granger Test to determine causality relationship.  
    6) For each candidate topic apply Causality measure to find most significant causal words among top words in each Topic.  
-   7) Record the impact values of these significance words using Pearson correlations
+   7) Record the impact values of these significance words using Granger Test lagged coefficients
    8) Separate positive impact terms and negative impact terms  
    9) If orientation of words in prior step is very weak, ignore minor group  
    10) Assign prior probabilities proportions according to significance levels  
